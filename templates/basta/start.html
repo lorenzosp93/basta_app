@@ -46,7 +46,6 @@
     <td>{{ session.name }}</td>
     <td><ul>
     {% for participant in session.participants %}
-    {{ session.participants }}
     <li> {{participant}} </li>
     {% empty %}
     {%trans "No participants yet"%}
@@ -89,7 +88,6 @@
     <td>{{ session.name }}</td>
     <td><ul>
     {% for participant in session.participants %}
-    {{ session.participants }}
     <li> {{participant}} </li>
     {% empty %}
     {%trans "No participants"%}

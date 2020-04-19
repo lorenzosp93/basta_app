@@ -6,7 +6,9 @@
 
 {% block content %}
 <div class="container">
-{% trans "User:" %} {{ form.instance.user }}
+<h1 class="jumbotron text-center m-3">
+    {% trans "Letter: "%} {{ form.instance.cur_round.letter }}
+</h1>
 
 <form method="post">
     {% if error %} 
@@ -39,19 +41,23 @@
     <script>
         $("form :input").change(function(){
             var form = $(this).closest("form");
+            var dataString = form.serialize();
             $.ajax({
                 type: "POST"
                 url: "{{ request.path }}",
-                data: form.serialize(),
+                data: dataString,
                 dataType: "json",
-                success: function () {}
+                success: function update_play() {
+                    console.log("AJAX call succeeded with the following data:")
+                    console.log(dataString)
+                }
                 error: function () {}
             })
         });
     </script>
 
     <div class="row justify-content-start">
-        <input type="submit" name="Basta" value="{% trans "Stop" %}" class="btn btn-primary">
+        <input type="submit" name="Stop" value="{% trans "Stop" %}" class="btn btn-primary">
     </div>
 
 </form>

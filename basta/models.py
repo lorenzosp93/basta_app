@@ -31,7 +31,7 @@ class Session(TimeStampable):
 
     @property
     def participants(self):
-        return set(*[round_.participants for round_ in self.round_set.all()])
+        return set([r for round_ in self.round_set.all() for r in round_.participants])
 
     def save(self, *args, **kwargs):
         "Override save function to add default for name field and slugify"
@@ -50,9 +50,10 @@ class Round(models.Model):
     session = models.ForeignKey(
         Session,
         on_delete=models.CASCADE,
-        verbose_name=_("Session")
+        verbose_name=_("Session"),
+        related_name="round_set"
     )
-    number = models.PositiveIntegerField(unique=True)
+    number = models.PositiveIntegerField()
     letter = models.TextField(
         max_length=1,
         verbose_name=_("Letter"),
@@ -65,12 +66,12 @@ class Round(models.Model):
 
     @property
     def participants(self):
-        return self.play_set.values('user').distinct()
+        return set([play.user for play in self.play_set.all()])
 
     @property
     def get_scores(self):
-        return {round_.user: round_.score 
-                 for round_ in self.round_set.all()}
+        return {play.user.username: play.score 
+                 for play in self.play_set.all()}
 
     @property
     def total_score(self):
@@ -92,10 +93,12 @@ class Play(models.Model):
     cur_round = models.ForeignKey(
         Round,
         on_delete=models.CASCADE,
+        related_name="play_set"
     )
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
+        related_name="play_set"
     )
 
     name = models.CharField(
@@ -148,7 +151,7 @@ class Play(models.Model):
     def play_validate_letter(self):
         letter = self.cur_round.letter
         for category in ["name", "surname", "plant", "animal",
-                         "place", "film", "object", "brand"]:
+                         "place", "film", "obj", "brand"]:
             word = self.__getattribute__(category)
         return validate_letter(letter, word)
     class Meta:

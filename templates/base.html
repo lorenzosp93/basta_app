@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+{% load i18n %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -12,8 +13,34 @@
 
 <body>
     <div id="navbar">
-        {% block navbar %}
-        {% endblock %}
+    {% block navbar %}
+    <nav class="navbar navbar-expand-sm sticky-top bg-white navbar-light">
+        <div class="container">
+            
+            <li class="navbar-brand align-items-start">
+              <a class="nav-link" href="{% url 'basta:home' %}">
+                {% trans "Home" %}
+              </a>
+            </li>
+            <ul class="nav navbar-nav">
+                <li class="nav-item dropdown mx-2 ontop">
+                    <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        {% if user.is_authenticated %}
+                            {% trans "Welcome, " %}{{ user.username }}
+                        {% else %}
+                            {% trans "Authentication" %}
+                        {% endif %}
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                    <a class="dropdown-item" href="{% url 'login' %}">{% trans "Login" %}</a>
+                    <a class="dropdown-item" href="{% url 'logout' %}">{% trans "Logout" %}</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    {% endblock %}
+
     </div>
 
     <div id="content" class="container p-4">
