@@ -1,0 +1,25 @@
+{% extends "basta/base.html" %} 
+
+{% block title %}
+Round {{ form.instance.cur_round.letter }}
+{% endblock %} 
+
+{% block content %}
+<div class="container">
+{% if error %} 
+    {{ error }} 
+{% endif %}
+
+{% csrf_token %}
+{% for field in form.visible_fields %} 
+    <div class="row">
+    {{ field.label_tag }}  
+    {{ field }}
+    {% if field.help_text %} 
+        {{ field.help_text|safe }}  {{field.errors.as_text|cut:'* '}}
+    {% endif %} 
+    {{ field.errors }} 
+    </div>
+{% endfor %}    
+ </div>
+{% endblock %}

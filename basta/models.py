@@ -2,26 +2,10 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
-from django.core.validators import ValidationError
+from .utils import validate_letter
+from .base_models import TimeStampable
 
 # Create your models here.
-
-class TimeStampable(models.Model):
-    "Abstract model to define timestamp attributes"
-    created_at = models.DateTimeField(
-        auto_now_add=True,
-        verbose_name="Created at",
-    )
-    modified_at = models.DateTimeField(
-        auto_now=True,
-        verbose_name="Modified at",
-    )
-
-    class Meta:
-        abstract = True
-        ordering = ["-created_at"]
-
-
 class Session(TimeStampable):
     "Model to define a play session, participants and rules"
     participants = models.ManyToManyField(
@@ -46,23 +30,21 @@ class Round(models.Model):
         verbose_name="Letter",
     )
 
-    def get_total_score(self):
-        return sum([round_.score for round_ in self.round_set.all()])
+    @property
+    def get_scores(self):
+        return {round_user: round_.score 
+                 for round_ in self.round_set.all()}
+
+    @property
+    def total_score(self):
+        return sum(get_scores.values())
 
     class Meta:
         verbose_name = _("Round")
         verbose_name_plural = _("Rounds")
         unique_together = ("letter", "session",)
 
-def validate_letter(letter, word):
-    if not word.startswith(letter):
-                raise ValidationError(
-                    _("%(w)s does not start with %(l)s"),
-                    params={
-                        "w": word,
-                        "l": letter,
-                    }
-                )
+
 
 class Play(models.Model):
     "Model to define one play for one user"
@@ -103,9 +85,9 @@ class Play(models.Model):
         verbose_name="Object",
         max_length=15,
     )
-    brand = models.CharField(
+    brand = models.TextField(
         verbose_name="Brand",
-        max_length=15,
+        max_length=25,
     )
 
     score = models.IntegerField(editable=False, default=0)
@@ -118,8 +100,6 @@ class Play(models.Model):
             word = self.__getattribute__(category)
             validate_letter(letter, word)
 
-    def save(self):
-        "Save the Play with the associated score for the user"
 
     class Meta:
         verbose_name = _("Play")
