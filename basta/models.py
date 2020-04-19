@@ -10,7 +10,7 @@ class Session(TimeStampable):
     "Model to define a play session, participants and rules"
     participants = models.ManyToManyField(
         User,
-        verbose_name="Participants",
+        verbose_name=_("Participants"),
     )
 
     class Meta:
@@ -23,16 +23,16 @@ class Round(models.Model):
     session = models.ForeignKey(
         Session,
         on_delete=models.CASCADE,
-        verbose_name="Session"
+        verbose_name=_("Session")
     )
     letter = models.TextField(
         max_length=1,
-        verbose_name="Letter",
+        verbose_name=_("Letter"),
     )
 
     @property
     def get_scores(self):
-        return {round_user: round_.score 
+        return {round_.user: round_.score 
                  for round_ in self.round_set.all()}
 
     @property
@@ -43,8 +43,6 @@ class Round(models.Model):
         verbose_name = _("Round")
         verbose_name_plural = _("Rounds")
         unique_together = ("letter", "session",)
-
-
 
 class Play(models.Model):
     "Model to define one play for one user"
@@ -58,36 +56,44 @@ class Play(models.Model):
     )
 
     name = models.CharField(
-        verbose_name="Name",
+        verbose_name=_("Name"),
         max_length=15,
+        blank=True,
     )
     surname = models.CharField(
-        verbose_name="Surname",
+        verbose_name=_("Surname"),
         max_length=15,
+        blank=True,
     )
     plant = models.CharField(
-        verbose_name="Flower / Fruit / Vegetable",
+        verbose_name=_("Flower / Fruit / Vegetable"),
         max_length=15,
+        blank=True,
     )
     animal = models.CharField(
-        verbose_name="Animal",
+        verbose_name=_("Animal"),
         max_length=15,
+        blank=True,
     )
     place = models.CharField(
-        verbose_name="City / Country",
+        verbose_name=_("City / Country"),
         max_length=15,
+        blank=True,
     )
     film = models.TextField(
         max_length=40,
-        verbose_name="Movie / Series",
+        verbose_name=_("Movie / Series"),
+        blank=True,
     )
     obj = models.CharField(
-        verbose_name="Object",
+        verbose_name=_("Object"),
         max_length=15,
+        blank=True,
     )
     brand = models.TextField(
-        verbose_name="Brand",
+        verbose_name=_("Brand"),
         max_length=25,
+        blank=True,
     )
 
     score = models.IntegerField(editable=False, default=0)

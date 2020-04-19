@@ -1,25 +1,60 @@
 {% extends "basta/base.html" %} 
 
 {% block title %}
-Round {{ form.instance.cur_round.letter }}
+{% trans "Round" %} {{ form.instance.cur_round.letter }}
 {% endblock %} 
 
 {% block content %}
 <div class="container">
-{% if error %} 
-    {{ error }} 
-{% endif %}
+{% trans "User:" %} {{ form.instance.user }}
 
-{% csrf_token %}
-{% for field in form.visible_fields %} 
-    <div class="row">
-    {{ field.label_tag }}  
-    {{ field }}
-    {% if field.help_text %} 
-        {{ field.help_text|safe }}  {{field.errors.as_text|cut:'* '}}
-    {% endif %} 
-    {{ field.errors }} 
+<form method="post">
+    {% if error %} 
+        <div class="alert-danger" role="alert">
+        {{ error }} 
+        </div>
+        <br><br>
+    {% endif %}
+
+    {% csrf_token %}
+    {% for field in form.visible_fields %} 
+        <div class="form-group row p-0">
+            <label class="col-sm-4 col-lg-2 col-form-label">
+            {% trans field.label_tag %}  
+            </label>
+            <div class="col-sm-8 col-lg-10">
+                {{ field }}
+                {% if field.help_text %} 
+                    <small class="form-text text-muted help">
+                    {% trans field.help_text|safe %}  
+                    </small>
+                    <span class="text-danger">
+                    {% trans field.errors.as_text|cut:'* ' %}
+                    </span>
+                {% endif %} 
+            </div>
+        </div>
+    {% endfor %}    
+    
+    <script>
+        $("form :input").change(function(){
+            var form = $(this).closest("form");
+            $.ajax({
+                type: "POST"
+                url: "{% url 'ajax/submit' %}",
+                data: form.serialize(),
+                dataType: "json",
+                success: function () {}
+            })
+        });
+    </script>
+
+    <div class="row justify-content-start">
+        <input type="submit" name="Basta" value="{% trans "Stop" %}" class="btn btn-primary">
     </div>
-{% endfor %}    
- </div>
+
+</form>
+
+</div>
+
 {% endblock %}

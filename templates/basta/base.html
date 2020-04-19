@@ -11,13 +11,13 @@
 </head>
 
 <body>
+    {% load i18n %}
     <div id="navbar">
         {% block navbar %}
         {% endblock %}
     </div>
 
     <div id="content" class="container p-4">
-
     {% block content %}
 
     {% endblock %}
