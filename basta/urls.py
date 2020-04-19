@@ -4,8 +4,16 @@ from .views import PlayView, RoundView, SessionView
 app_name = 'basta'
 
 urlpatterns = [
-    path('', PlayView.as_view()),
-    path('play/<session:pk>/<round:pk>', RoundView.as_view())
-    path('play/<session:pk>/<round:pk>/<play:pk>', PlayView.as_view()),
-
+    path('play/', PlayView.as_view()),
+    path('play/session/<int:pk>/', SessionView.as_view(), name="session"),
+    path(
+        'play/session/<int:pk>/round/<int:number>/',
+        RoundView.as_view(),
+        name="round"
+    ),
+    path(
+        'play/session/<int:pk>/round/<int:number>/play',
+        PlayView.as_view(),
+        name="play"
+    ),
 ]

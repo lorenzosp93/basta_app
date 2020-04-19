@@ -1,53 +1,48 @@
-from django.shortcuts import render
-from django.http import JsonResponse
-from django.views.generic import CreateView
+from django.shortcuts import render, redirect, reverse
+from django.views.generic import TemplateView, UpdateView
+from .base.views import AjaxableResponseMixin
 from .forms import PlayForm
+from .models import Round, Session
 
 # Create your views here.
-class AjaxableResponseMixin:
-    """
-    Mixin to add AJAX support to a form.
-    Must be used with an object-based FormView (e.g. CreateView)
-    """
-    def form_invalid(self, form):
-        response = super().form_invalid(form)
-        if self.request.is_ajax():
-            return JsonResponse(form.errors, status=400)
-        else:
-            return response
-
-    def form_valid(self, form):
-        # We make sure to call the parent's form_valid() method because
-        # it might do some processing (in the case of CreateView, it will
-        # call form.save() for example).
-        response = super().form_valid(form)
-        if self.request.is_ajax():
-            data = {
-                'pk': self.object.pk,
-            }
-            return JsonResponse(data)
-        else:
-            return response
-
-class PlayView(AjaxableResponseMixin, CreateView):
+class PlayView(AjaxableResponseMixin, UpdateView):
     template_name = "basta/play.html"
     form_class = PlayForm
-    success_url = "basta/round.html"
-    
-    def get(self, request, *args, **kwargs):
-        return super().get(request, *args, **kwargs)
+    # success_url = reverse('basta:round', kwargs={
+    #     'session': lambda self: self.get_form().instance.cur_round.session.pk,
+    #     'round': lambda self: self.get_form().instance.cur_round.pk,
+    # })
+    def get_object(self):
+        session = Session.objects.filter(pk=self.kwargs.get('pk'))
+        round_ = Round.objects.filter(session=session, number=self.kwargs.get('number'))
+        return round_.play_set.get(user=self.request.user)
 
     def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
         form = self.get_form()
-        if request.get("Basta"):
-            pass
-        
-        if form.is_valid():
-            self.form_valid(self, form)
-        else:
-            self.form_invalid(self, form)
+        self.form_logic(request, form)
 
-    def form_valid(self, form):
-        # This method is called when valid form data has been POSTed.
-        # It should return an HttpResponse.
-        return super().form_valid(form)
+    def form_logic(self, request, form):
+        "Defines the logic of what to do when a POST request is received"
+        if form.instance.cur_round.active:
+            if form.is_valid():
+                if request.get("Stop"):
+                    upon_valid_stop(form)
+                form.save()
+            else:
+                self.form_invalid(self, form)
+        else:
+            self.finish_round()
+
+    def upon_valid_stop(self, form):
+        "Trigger for when player hits the Stop button"
+        form.instance.cur_round.active = False
+        return self.finish_round()
+
+    def finish_round(self):
+        return redirect(self.get_success_url())
+
+class RoundView(AjaxableResponseMixin, TemplateView):
+    template_name = "basta/round.html"
+class SessionView(TemplateView):
+    template_name = "basta/session.html"

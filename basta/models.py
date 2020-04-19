@@ -3,7 +3,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
 from .utils import validate_letter
-from .base_models import TimeStampable
+from .base.models import TimeStampable
 
 # Create your models here.
 class Session(TimeStampable):
@@ -11,6 +11,10 @@ class Session(TimeStampable):
     participants = models.ManyToManyField(
         User,
         verbose_name=_("Participants"),
+    )
+    active = models.BooleanField(
+        verbose_name=_("Is session active?"),
+        default = True,
     )
 
     class Meta:
@@ -25,9 +29,15 @@ class Round(models.Model):
         on_delete=models.CASCADE,
         verbose_name=_("Session")
     )
+    number = models.PositiveIntegerField()
     letter = models.TextField(
         max_length=1,
         verbose_name=_("Letter"),
+        editable=False,
+    )
+    active = models.BooleanField(
+        verbose_name=_("Is round active?"),
+        default=True,
     )
 
     @property
@@ -38,6 +48,12 @@ class Round(models.Model):
     @property
     def total_score(self):
         return sum(get_scores.values())
+
+    def save(self, *args, **kwargs):
+        "Increment the round number"
+        if self.pk == None:
+            self.number = self.session.round_set.count() + 1
+        super().save(*args, **kwargs)
 
     class Meta:
         verbose_name = _("Round")
@@ -96,17 +112,18 @@ class Play(models.Model):
         blank=True,
     )
 
-    score = models.IntegerField(editable=False, default=0)
+    score = models.PositiveIntegerField(editable=False, default=0)
 
     def clean(self):
         "Define validations on word values"
+        self.play_validate_letter()
+
+    def play_validate_letter(self):
         letter = self.cur_round.letter
         for category in ["name", "surname", "plant", "animal",
                          "place", "film", "object", "brand"]:
             word = self.__getattribute__(category)
-            validate_letter(letter, word)
-
-
+        return validate_letter(letter, word)
     class Meta:
         verbose_name = _("Play")
         verbose_name_plural = _("Plays")
