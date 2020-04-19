@@ -2,8 +2,14 @@
 {% load i18n %}
 
 {% block title %}
-{% trans "Session" %} 
+{% trans "Session" %} {{ session.name }}
 {% endblock %} 
 
 {% block content %}
+
+<h3> {{session.name}}</h3>
+
+<a role="button" class="btn btn-primary" href="{% url 'basta:sessionclose' session.slug %}">
+{% trans "Close this session" %}
+</a>
 {% endblock %}

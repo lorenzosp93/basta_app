@@ -2,20 +2,43 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
+from django.utils.text import slugify
+from django.utils.timezone import now
 from .utils import validate_letter
 from .base.models import TimeStampable
 
 # Create your models here.
+
 class Session(TimeStampable):
     "Model to define a play session, participants and rules"
-    participants = models.ManyToManyField(
-        User,
-        verbose_name=_("Participants"),
-    )
     active = models.BooleanField(
         verbose_name=_("Is session active?"),
         default = True,
     )
+    name = models.TextField(
+        verbose_name=_("Session name"),
+        max_length=30,
+        blank=True,
+    )
+    slug = models.SlugField(
+        max_length=30,
+        unique=True,
+    )
+
+    @property
+    def n_rounds(self):
+        return self.round_set.count()
+
+    @property
+    def participants(self):
+        return set(*[round_.participants for round_ in self.round_set.all()])
+
+    def save(self, *args, **kwargs):
+        "Override save function to add default for name field and slugify"
+        if not self.name:
+            self.name =  _("Game on %(date)s" % {"date": now()})
+        self.slug = slugify(self.name)
+        super().save(*args, **kwargs)
 
     class Meta:
         verbose_name = _("Session")
@@ -29,7 +52,7 @@ class Round(models.Model):
         on_delete=models.CASCADE,
         verbose_name=_("Session")
     )
-    number = models.PositiveIntegerField()
+    number = models.PositiveIntegerField(unique=True)
     letter = models.TextField(
         max_length=1,
         verbose_name=_("Letter"),
@@ -41,6 +64,10 @@ class Round(models.Model):
     )
 
     @property
+    def participants(self):
+        return self.play_set.values('user').distinct()
+
+    @property
     def get_scores(self):
         return {round_.user: round_.score 
                  for round_ in self.round_set.all()}
@@ -50,7 +77,7 @@ class Round(models.Model):
         return sum(get_scores.values())
 
     def save(self, *args, **kwargs):
-        "Increment the round number"
+        "Override save function to calculate the round number"
         if self.pk == None:
             self.number = self.session.round_set.count() + 1
         super().save(*args, **kwargs)

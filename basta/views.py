@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, reverse
-from django.views.generic import TemplateView, UpdateView
+from django.views.generic import ListView, DetailView, UpdateView
 from .base.views import AjaxableResponseMixin
 from .forms import PlayForm
 from .models import Round, Session
@@ -13,8 +13,8 @@ class PlayView(AjaxableResponseMixin, UpdateView):
     #     'round': lambda self: self.get_form().instance.cur_round.pk,
     # })
     def get_object(self):
-        session = Session.objects.filter(pk=self.kwargs.get('pk'))
-        round_ = Round.objects.filter(session=session, number=self.kwargs.get('number'))
+        session = Session.objects.get(slug=self.kwargs.get('slug'))
+        round_ = Round.objects.get(session=session, number=self.kwargs.get('number'))
         return round_.play_set.get(user=self.request.user)
 
     def post(self, request, *args, **kwargs):
@@ -42,7 +42,34 @@ class PlayView(AjaxableResponseMixin, UpdateView):
     def finish_round(self):
         return redirect(self.get_success_url())
 
-class RoundView(AjaxableResponseMixin, TemplateView):
+class RoundView(AjaxableResponseMixin, DetailView):
     template_name = "basta/round.html"
-class SessionView(TemplateView):
+    model = Round
+    context_object_name = "rounds"
+
+    def get_object(self):
+        session = Session.objects.get(slug=self.kwargs.get('slug'))
+        return Round.objects.get(session=session, number=self.kwargs.get('number'))
+    
+class SessionView(DetailView):
     template_name = "basta/session.html"
+    model = Session
+    context_object_name = "session"
+
+class SessionListView(ListView):
+    template_name = "basta/start.html"
+    model = Session
+    context_object_name = "sessions"
+
+def session_create(request):
+    name = request.POST.get('session_name', '')
+    new_session = Session.objects.create(
+        name=name,
+    )
+    return redirect(reverse("basta:session", kwargs={'slug':new_session.slug}))
+
+def session_close(request, slug):
+    session = Session.objects.get(slug=slug)
+    session.active = False
+    session.save()
+    return redirect(reverse("basta:home"))
