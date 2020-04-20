@@ -1,0 +1,280 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-04-20 14:08+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: .\basta\models.py:15
+msgid "Is session active?"
+msgstr "La sessione è attiva?"
+
+#: .\basta\models.py:19 .\templates\basta\start.html:17
+msgid "Session name"
+msgstr "Nome della sessione"
+
+#: .\basta\models.py:60
+#, python-format
+msgid "Game on %(date)s"
+msgstr "Partita del %(date)s"
+
+#: .\basta\models.py:65 .\basta\models.py:74 .\templates\basta\session.html:5
+#: .\templates\basta\start.html:5
+msgid "Session"
+msgstr "Sessione"
+
+#: .\basta\models.py:66
+msgid "Sessions"
+msgstr "Sessioni"
+
+#: .\basta\models.py:80 .\templates\basta\session.html:64
+msgid "Letter"
+msgstr "Lettera"
+
+#: .\basta\models.py:84
+msgid "Is round active?"
+msgstr "Il turno è attivo?"
+
+#: .\basta\models.py:117
+msgid "Round"
+msgstr "Turno"
+
+#: .\basta\models.py:118
+msgid "Rounds"
+msgstr "Turni"
+
+#: .\basta\models.py:135 .\templates\basta\round.html:35
+#: .\templates\basta\start.html:33 .\templates\basta\start.html:76
+msgid "Name"
+msgstr "Nome"
+
+#: .\basta\models.py:140 .\templates\basta\round.html:36
+msgid "Surname"
+msgstr "Cognome"
+
+#: .\basta\models.py:145 .\templates\basta\round.html:37
+msgid "Flower / Fruit / Vegetable"
+msgstr "Fiore / Frutto / Vegetale"
+
+#: .\basta\models.py:150 .\templates\basta\round.html:38
+msgid "Animal"
+msgstr "Animale"
+
+#: .\basta\models.py:155 .\templates\basta\round.html:39
+msgid "City / Country"
+msgstr "Città / Paese"
+
+#: .\basta\models.py:161 .\templates\basta\round.html:40
+msgid "Movie / Series"
+msgstr "Film / Serie"
+
+#: .\basta\models.py:165 .\templates\basta\round.html:41
+msgid "Object"
+msgstr "Oggetto"
+
+#: .\basta\models.py:170 .\templates\basta\round.html:42
+msgid "Brand"
+msgstr "Marca"
+
+#: .\basta\models.py:188
+msgid "Play"
+msgstr "Giocata"
+
+#: .\basta\models.py:189
+msgid "Plays"
+msgstr "Giocate"
+
+#: .\basta\utils.py:7
+#, python-format
+msgid "%(w)s does not start with %(l)s"
+msgstr "%(w)s non inizia per %(l)s"
+
+#: .\basta\views.py:110
+msgid "User is not authenticated"
+msgstr "L'utente non è autenticato"
+
+#: .\basta\views.py:144
+#, python-format
+msgid "Letter %(letter)s"
+msgstr "Lettera %(letter)s"
+
+#: .\templates\base.html:23
+msgid "Home"
+msgstr "Home"
+
+#: .\templates\base.html:30
+msgid "Welcome, "
+msgstr "Benvenuto/a, "
+
+#: .\templates\base.html:32
+msgid "Authentication"
+msgstr "Autenticazione"
+
+#: .\templates\base.html:36
+msgid "Login"
+msgstr "Accesso"
+
+#: .\templates\base.html:37
+msgid "Logout"
+msgstr "Uscita"
+
+#: .\templates\base.html:38
+msgid "Sign up"
+msgstr "Registrazione"
+
+#: .\templates\basta\play.html:4
+msgid "Round:"
+msgstr "Turno:"
+
+#: .\templates\basta\play.html:10
+msgid "Letter: "
+msgstr "Lettera: "
+
+#: .\templates\basta\play.html:43
+msgid "Stop"
+msgstr "Basta"
+
+#: .\templates\basta\round.html:5 .\templates\basta\round.html:11
+msgid "Round #"
+msgstr "Turno #"
+
+#: .\templates\basta\round.html:16
+msgid "Start your play"
+msgstr "Inizia la giocata"
+
+#: .\templates\basta\round.html:23
+msgid "Return to session"
+msgstr "Ritorna alla sessione"
+
+#: .\templates\basta\round.html:34
+msgid "User"
+msgstr "Utente"
+
+#: .\templates\basta\round.html:43
+msgid "Total"
+msgstr "Totale"
+
+#: .\templates\basta\round.html:63
+msgid "No plays available yet"
+msgstr "Nessuna giocata è ancora disponibile"
+
+#: .\templates\basta\round.html:68
+msgid "My score"
+msgstr "Il mio punteggio"
+
+#: .\templates\basta\round.html:85
+msgid "Submit score"
+msgstr "Invia punteggio"
+
+#: .\templates\basta\session.html:12
+msgid "Start new round"
+msgstr "Inizia il nuovo round"
+
+#: .\templates\basta\session.html:16
+msgid "Close this session"
+msgstr "Chiudi la sessione"
+
+#: .\templates\basta\session.html:20
+msgid "Active rounds:"
+msgstr "Round attivi:"
+
+#: .\templates\basta\session.html:26 .\templates\basta\start.html:34
+#: .\templates\basta\start.html:77
+msgid "Participants"
+msgstr "Partecipanti"
+
+#: .\templates\basta\session.html:39 .\templates\basta\session.html:80
+#: .\templates\basta\session.html:81 .\templates\basta\start.html:95
+msgid "No participants"
+msgstr "Nessun partecipante"
+
+#: .\templates\basta\session.html:44 .\templates\basta\start.html:58
+msgid "Join"
+msgstr "Unisciti"
+
+#: .\templates\basta\session.html:51 .\templates\basta\session.html:93
+#: .\templates\basta\session.html:118 .\templates\basta\start.html:65
+#: .\templates\basta\start.html:111
+msgid "No sessions available"
+msgstr "Nessuna sessione disponibile"
+
+#: .\templates\basta\session.html:58
+msgid "Closed rounds:"
+msgstr "Turni terminati:"
+
+#: .\templates\basta\session.html:65 .\templates\basta\start.html:78
+msgid "Winner"
+msgstr "Vincitore"
+
+#: .\templates\basta\session.html:66
+msgid "Score"
+msgstr "Punteggio"
+
+#: .\templates\basta\session.html:85
+msgid "View"
+msgstr "Vedi"
+
+#: .\templates\basta\session.html:99
+msgid "Scoreboard:"
+msgstr "Classifica:"
+
+#: .\templates\basta\session.html:104
+msgid "Participant"
+msgstr "Partecipante"
+
+#: .\templates\basta\session.html:105
+msgid "Total score"
+msgstr "Punteggio totale"
+
+#: .\templates\basta\start.html:10
+msgid "Welcome to Basta online"
+msgstr "Benvenuti a Basta online"
+
+#: .\templates\basta\start.html:13
+msgid "Create new game session:"
+msgstr "Crea una nuova sessione di gioco"
+
+#: .\templates\basta\start.html:20
+msgid "Insert a name for the new session, cannot be duplicate"
+msgstr "Inserisci un nome per la nuova sessione. Non può essere duplicato."
+
+#: .\templates\basta\start.html:23
+msgid "Start"
+msgstr "Inizia"
+
+#: .\templates\basta\start.html:27
+msgid "Active sessions:"
+msgstr "Sessioni attive:"
+
+#: .\templates\basta\start.html:35 .\templates\basta\start.html:79
+msgid "Date"
+msgstr "Data"
+
+#: .\templates\basta\start.html:36 .\templates\basta\start.html:80
+msgid "N. rounds"
+msgstr "N. di turni"
+
+#: .\templates\basta\start.html:51
+msgid "No participants yet"
+msgstr "Nessun partecipante è ancora disponibile"
+
+#: .\templates\basta\start.html:70
+msgid "Closed sessions:"
+msgstr "Sessioni terminate:"
+
+#: .\templates\basta\start.html:105
+msgid "Cannot join"
+msgstr "Non è possibile unirsi"
