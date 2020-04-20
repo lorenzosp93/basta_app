@@ -28,8 +28,7 @@ SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', '_zj@s*0occg1$klsgd$48v42w$zv1x=p48q
 DEBUG = os.getenv('DJANGO_DEBUG', 'True') != 'False'
 
 ALLOWED_HOSTS = [
-    'basta-app-stage.herokuapp.com/',
-    'basta-app.herokuapp.com/',
+    '.herokuapp.com'
 ]
 if DEBUG:
     ALLOWED_HOSTS.append('*')
