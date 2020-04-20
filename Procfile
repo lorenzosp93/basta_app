@@ -1,2 +1,2 @@
 release: python manage.py migrate
-web: gunicorn locallibrary.wsgi --log-file -
+web: gunicorn basta_app.wsgi --log-file -
