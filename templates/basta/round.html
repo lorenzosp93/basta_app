@@ -59,7 +59,7 @@
         {% trans "No plays available yet" %}
       </p>
       {% endfor %}
-      {% if not my_play.score > 0 or not user.is_authenticated %}
+      {% if my_play.score == 0 %}
       <tr>
         <th scope="row">{%trans "My score"%}</th>
         <td scope="row"><input type="number" class="s form-control" value="0"></td>
@@ -75,7 +75,7 @@
       {% endif %}
     </tbody>
   </table>
-  {% if not my_play.score > 0 or not user.is_authenticated %}
+  {% if my_play.score == 0 %}
 
   <div class="row justify-content-start">
     <button type="submit" name="Submit" class="btn btn-primary m-3">{% trans "Submit score" %}</button>

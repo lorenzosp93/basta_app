@@ -23,7 +23,7 @@ class Session(TimeStampable):
         blank=True,
     )
     slug = models.SlugField(
-        max_length=30,
+        max_length=50,
         unique=True,
     )
 
@@ -68,7 +68,7 @@ class Session(TimeStampable):
         verbose_name_plural = _("Sessions")
 
 
-class Round(models.Model):
+class Round(TimeStampable):
     "Model to defind one round within a session"
     session = models.ForeignKey(
         Session,
@@ -127,7 +127,7 @@ class Round(models.Model):
         verbose_name_plural = _("Rounds")
         unique_together = ("letter", "session",)
 
-class Play(models.Model):
+class Play(TimeStampable):
     "Model to define one play for one user"
     cur_round = models.ForeignKey(
         Round,

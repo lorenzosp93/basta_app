@@ -21,7 +21,6 @@ class PlayView(AjaxableResponseMixin, UpdateView):
         round_ = Round.objects.get(session=session, number=self.kwargs.get('number'))
         return round_.play_set.get(user=self.request.user)
     
-    @login_required
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)
 
@@ -98,11 +97,12 @@ class SessionListView(ListView):
     model = Session
     context_object_name = "sessions"
 
+@login_required
 def play_create(request, slug, number):
     session = Session.objects.get(slug=slug)
     round_ = Round.objects.get(number=number, session=session)
     user = request.user
-    if user and not round_.play_set.filter(user=user):
+    if user and not round_.play_set.filter(user=user) and round_.active:
         new_play = Play.objects.create(
             cur_round=round_,
             user=user
@@ -113,10 +113,9 @@ def play_create(request, slug, number):
         }))
     else:
         return redirect(
-                reverse('basta:round', kwargs={'slug':slug, 'number':number}), 
-                context={'error': _('User is not authenticated')}
-            )
+                reverse('basta:round', kwargs={'slug':slug, 'number':number}))
 
+@login_required
 def play_score(request, slug, number):
     session = Session.objects.get(slug=slug)
     round_ = Round.objects.get(number=number, session=session)
@@ -133,9 +132,10 @@ def play_score(request, slug, number):
         reverse('basta:round', kwargs={'slug':slug, 'number':number})
     )
 
+@login_required
 def round_create(request, slug):
     session = Session.objects.get(slug=slug)
-    if not session.round_set.filter(active=True):
+    if not session.round_set.filter(active=True) and session.active:
         new_round = Round.objects.create(
             session=session,
         )
@@ -146,13 +146,14 @@ def round_create(request, slug):
     else:
         return redirect(reverse('basta:session', kwargs={'slug':slug}))
 
+@login_required
 def session_create(request):
     name = request.POST.get('session_name', '')
     new_session = Session.objects.create(
         name=name,
     )
     return redirect(reverse("basta:session", kwargs={'slug':new_session.slug}))
-
+@login_required
 def session_close(request, slug):
     session = Session.objects.get(slug=slug)
     session.active = False
