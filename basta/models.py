@@ -17,7 +17,7 @@ class Session(TimeStampable):
     )
     name = models.TextField(
         verbose_name=_("Session name"),
-        max_length=30,
+        max_length=50,
         blank=True,
     )
     slug = models.SlugField(
@@ -32,6 +32,18 @@ class Session(TimeStampable):
     @property
     def participants(self):
         return set([r for round_ in self.round_set.all() for r in round_.participants])
+
+    @property
+    def get_scores(self):
+        rounds_scores = [round_.get_scores for round_ in self.round_set.all()]
+        participant_scores = {}
+        for round_ in rounds_scores:
+            for key, val in round_.items():
+                if key not in participant_scores.keys():
+                    participant_scores[key] = val
+                else:
+                    participant_scores[key] += val
+        return participant_scores
 
     def save(self, *args, **kwargs):
         "Override save function to add default for name field and slugify"
@@ -72,6 +84,14 @@ class Round(models.Model):
     def get_scores(self):
         return {play.user.username: play.score 
                  for play in self.play_set.all()}
+    
+    @property
+    def get_winner_score(self):
+        scores = self.get_scores
+        winner = max(scores.keys(), key=(lambda key: scores[key]))
+        return {winner: scores[winner]}
+    
+    
 
     @property
     def total_score(self):
