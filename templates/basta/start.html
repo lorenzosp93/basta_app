@@ -75,6 +75,7 @@
     <th scope="col">#</th>
     <th scope="col">{% trans "Name" %}</th>
     <th scope="col">{% trans "Participants" %}</th>
+    <th scope="col">{% trans "Winner" %}</th>
     <th scope="col">{% trans "Date" %}</th>
     <th scope="col">{% trans "N. rounds" %}</th>
     <th></th>
@@ -86,6 +87,7 @@
   <tr>
     <th scope="row">{{ session.pk }}</th>
     <td>{{ session.name }}</td>
+
     <td><ul>
     {% for participant in session.participants %}
     <li> {{participant}} </li>
@@ -93,6 +95,11 @@
     {%trans "No participants"%}
     {% endfor %}
     </ul></td>
+    <td>
+    {% for winner, score in session.get_winner_score.items %}
+    <i class="fas fa-crown"></i>{{winner}} - {{score}}
+    {% endfor %} 
+    </td>
     <td>{{ session.modified_at.date }}</td>
     <td>{{ session.n_rounds }}</td>
     <td>{% trans "Cannot join"%}</td>

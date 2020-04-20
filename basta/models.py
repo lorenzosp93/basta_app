@@ -44,6 +44,15 @@ class Session(TimeStampable):
                 else:
                     participant_scores[key] += val
         return participant_scores
+    
+    @property
+    def get_winner_score(self):
+        scores = self.get_scores
+        if scores:
+            winner = max(scores.keys(), key=(lambda key: scores[key]))
+            return {winner: scores[winner]}
+        else:
+            return {}
 
     def save(self, *args, **kwargs):
         "Override save function to add default for name field and slugify"
@@ -88,8 +97,11 @@ class Round(models.Model):
     @property
     def get_winner_score(self):
         scores = self.get_scores
-        winner = max(scores.keys(), key=(lambda key: scores[key]))
-        return {winner: scores[winner]}
+        if scores:
+            winner = max(scores.keys(), key=(lambda key: scores[key]))
+            return {winner: scores[winner]}
+        else:
+            return {}
 
     @property
     def total_score(self):

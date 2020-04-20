@@ -2,8 +2,8 @@
 
 {% block content %}
 {% load i18n %}
-  <h3>Sign up</h3>
-
+<h3>Sign up</h3>
+<form method="post">
 {% csrf_token %}
 {% for field in form.visible_fields %} 
     <div class="form-group row p-0">
