@@ -1,16 +1,12 @@
 {% extends "base.html" %} 
 {% load i18n %}
 
-{% block title %}
-{% trans "Session" %} 
-{% endblock %} 
-
 {% block content %}
 
 <h3> {% trans "Welcome to Basta online" %} </h3>
 
 <div class="jumbotron">
-<h6> {%trans "Create new game session:"%} </h6>
+<h5> {%trans "Create new game session:"%} </h5>
 <form method="POST" action="{% url 'basta:sessioncreate' %}">
 {% csrf_token %}
   <div class="form-group">

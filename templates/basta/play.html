@@ -57,9 +57,12 @@
             url: window.location.href,
             data: dataString,
             dataType: "json",
-            success: function () {
+            success: function (resp) {
                 console.log("AJAX call succeeded with the following data:");
                 console.log(dataString)
+                if(resp.stop){
+                    form.submit()
+                }
             },
             error: function () {
                 console.log("Something went wrong")
