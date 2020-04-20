@@ -23,7 +23,7 @@ class Session(TimeStampable):
         blank=True,
     )
     slug = models.SlugField(
-        max_length=30,
+        max_length=50,
         unique=True,
     )
 
