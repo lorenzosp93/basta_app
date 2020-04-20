@@ -8,13 +8,16 @@
 {% block content %}
 <div class="jumbotron">
 <h3> {{session.name}}</h3>
-<a role="button" class="btn btn-primary my-3" href="{% url 'basta:roundcreate' session.slug %}">
-{% trans "Start new round" %}
-</a>
 
-<a role="button" class="btn btn-primary my-3" href="{% url 'basta:sessionclose' session.slug %}">
-{% trans "Close this session" %}
-</a>
+{% if session.active %}
+  <a role="button" class="btn btn-primary my-3" href="{% url 'basta:roundcreate' session.slug %}">
+  {% trans "Start new round" %}
+  </a>
+
+  <a role="button" class="btn btn-primary my-3" href="{% url 'basta:sessionclose' session.slug %}">
+  {% trans "Close this session" %}
+  </a>
+{% endif %}
 </div>
 
 <h5> {% trans "Active rounds:"%} </h5>
@@ -73,8 +76,8 @@
   <tr>
     <th scope="row">{{ round.number }}</th>
     <td>{{ round.letter }}</td>
-    {% for participant, score in round.get_winner_score.items %}
-      <td> {{ participant }}</td>
+    {% for winner, score in round.get_winner_score.items %}
+      <td><i class="fas fa-crown"> {{ winner }}</td>
       <td>{{ score }}</td>
     {% empty %}
     <td>{%trans "No participants"%}</td>

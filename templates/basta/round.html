@@ -16,7 +16,7 @@
     {% trans "Start your play" %}
     </a>
   {% else %}
-    <p>{%trans "Please log in to start playing!"%}</p>
+    <div class="alert alert-warning my-3">{%trans "Please log in to start playing!"%}</div>
   {% endif %}
 {% else %}
 <a role="button" class="btn btn-primary my-3" href="{% url 'basta:session' round.session.slug %}">
@@ -79,7 +79,7 @@
 {% endif %}
 </tbody>
 </table>
-{% if not my_play.score > 0 %}
+{% if not my_play.score > 0 or not user.is_authenticated %}
 
 <div class="row justify-content-start">
     <button type="submit" name="Submit" class="btn btn-primary m-3">{% trans "Submit score" %}</button>

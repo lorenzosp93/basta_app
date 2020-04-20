@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-20 17:50+0200\n"
+"POT-Creation-Date: 2020-04-20 19:34+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -39,7 +39,7 @@ msgstr "Sesión"
 msgid "Sessions"
 msgstr "Sesiones"
 
-#: .\basta\models.py:82 .\templates\basta\session.html:64
+#: .\basta\models.py:82 .\templates\basta\session.html:67
 msgid "Letter"
 msgstr "Letra"
 
@@ -115,23 +115,23 @@ msgstr "Basta app"
 msgid "Home"
 msgstr "Inicio"
 
-#: .\templates\base.html:48
+#: .\templates\base.html:30
 msgid "Welcome, "
 msgstr "Bienvenid@, "
 
-#: .\templates\base.html:50
+#: .\templates\base.html:32
 msgid "Authentication"
 msgstr "Autentificación"
 
-#: .\templates\base.html:54
+#: .\templates\base.html:36
 msgid "Login"
 msgstr "Login"
 
-#: .\templates\base.html:55
+#: .\templates\base.html:37
 msgid "Logout"
 msgstr "Logout"
 
-#: .\templates\base.html:56 .\templates\registration\signup.html:5
+#: .\templates\base.html:38 .\templates\registration\signup.html:5
 #: .\templates\registration\signup.html:26
 msgid "Sign up"
 msgstr "Registrate"
@@ -184,63 +184,63 @@ msgstr "Mis puntos"
 msgid "Submit score"
 msgstr "Confirmar puntos"
 
-#: .\templates\basta\session.html:12
+#: .\templates\basta\session.html:14
 msgid "Start new round"
 msgstr "Empieza nueva ronda"
 
-#: .\templates\basta\session.html:16
+#: .\templates\basta\session.html:18
 msgid "Close this session"
 msgstr "Cerrar la sesión"
 
-#: .\templates\basta\session.html:20
+#: .\templates\basta\session.html:23
 msgid "Active rounds:"
 msgstr "Rondas activas:"
 
-#: .\templates\basta\session.html:26 .\templates\basta\start.html:30
-#: .\templates\basta\start.html:73
+#: .\templates\basta\session.html:29 .\templates\basta\start.html:30
 msgid "Participants"
 msgstr "Participantes"
 
-#: .\templates\basta\session.html:39 .\templates\basta\session.html:80
-#: .\templates\basta\session.html:81 .\templates\basta\start.html:91
+#: .\templates\basta\session.html:42 .\templates\basta\session.html:83
+#: .\templates\basta\session.html:84 .\templates\basta\start.html:91
+#: .\templates\basta\start.html:92
 msgid "No participants"
 msgstr "No hay participantes"
 
-#: .\templates\basta\session.html:44 .\templates\basta\start.html:54
+#: .\templates\basta\session.html:47 .\templates\basta\start.html:54
 msgid "Join"
 msgstr "Unirse"
 
-#: .\templates\basta\session.html:51 .\templates\basta\session.html:93
-#: .\templates\basta\session.html:118 .\templates\basta\start.html:61
-#: .\templates\basta\start.html:107
+#: .\templates\basta\session.html:54 .\templates\basta\session.html:96
+#: .\templates\basta\session.html:121 .\templates\basta\start.html:61
+#: .\templates\basta\start.html:106
 msgid "No sessions available"
 msgstr "No hay sesiónes disponibles"
 
-#: .\templates\basta\session.html:58
+#: .\templates\basta\session.html:61
 msgid "Closed rounds:"
 msgstr "Rondas concluidas:"
 
-#: .\templates\basta\session.html:65 .\templates\basta\start.html:74
+#: .\templates\basta\session.html:68 .\templates\basta\start.html:73
 msgid "Winner"
 msgstr "Ganador"
 
-#: .\templates\basta\session.html:66
+#: .\templates\basta\session.html:69
 msgid "Score"
 msgstr "Puntos"
 
-#: .\templates\basta\session.html:85
+#: .\templates\basta\session.html:88 .\templates\basta\start.html:99
 msgid "View"
 msgstr "Ver"
 
-#: .\templates\basta\session.html:99
+#: .\templates\basta\session.html:102
 msgid "Scoreboard:"
 msgstr "Tabla de puntos:"
 
-#: .\templates\basta\session.html:104
+#: .\templates\basta\session.html:107
 msgid "Participant"
 msgstr "Participante"
 
-#: .\templates\basta\session.html:105
+#: .\templates\basta\session.html:108
 msgid "Total score"
 msgstr "Puntos totales"
 
@@ -280,9 +280,9 @@ msgstr "Todavía no hay participantes"
 msgid "Closed sessions:"
 msgstr "Sesiones concluidas:"
 
-#: .\templates\basta\start.html:101
-msgid "Cannot join"
-msgstr "Acceso bloqueado"
+#: .\templates\basta\start.html:74
+msgid "Points"
+msgstr ""
 
 #: .\templates\registration\logged_out.html:5
 msgid "Logged out"
@@ -357,6 +357,9 @@ msgstr "Alguien pidió un e-mail para resetear la contraseña."
 #: .\templates\registration\password_reset_email.html:8
 msgid "Follow the link below:"
 msgstr "Seleccione el siguiente link:"
+
+#~ msgid "Cannot join"
+#~ msgstr "Acceso bloqueado"
 
 #, python-format
 #~ msgid "Letter %(letter)s"

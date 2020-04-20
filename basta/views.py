@@ -154,4 +154,7 @@ def session_close(request, slug):
     session = Session.objects.get(slug=slug)
     session.active = False
     session.save()
+    for round_ in session.round_set.all():
+        round_.active = False
+        round_.save()
     return redirect(reverse("basta:home"))
