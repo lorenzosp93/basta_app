@@ -16,7 +16,7 @@
     {% trans "Start your play" %}
     </a>
   {% else %}
-    <p>Please log in to start playing!</p>
+    <p>{%trans "Please log in to start playing!"%}</p>
   {% endif %}
 {% else %}
 <a role="button" class="btn btn-primary my-3" href="{% url 'basta:session' round.session.slug %}">

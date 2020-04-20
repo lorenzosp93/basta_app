@@ -2,7 +2,7 @@
 
 {% block content %}
 {% load i18n %}
-<h3>Sign up</h3>
+<h3>{%trans "Sign up"%}</h3>
 <form method="post">
 {% csrf_token %}
 {% for field in form.visible_fields %} 
@@ -23,6 +23,6 @@
         </div>
     </div>
 {% endfor %}
-    <button class="btn btn-primary m-3" type="submit">Sign up</button>
+    <button class="btn btn-primary m-3" type="submit">{%trans "Sign up"%}</button>
   </form>
 {% endblock %}

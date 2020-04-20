@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-20 14:08+0200\n"
+"POT-Creation-Date: 2020-04-20 16:05+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -131,7 +131,8 @@ msgstr "Login"
 msgid "Logout"
 msgstr "Logout"
 
-#: .\templates\base.html:38
+#: .\templates\base.html:38 .\templates\registration\signup.html:5
+#: .\templates\registration\signup.html:26
 msgid "Sign up"
 msgstr "Registrate"
 
@@ -154,6 +155,10 @@ msgstr "Ronda #"
 #: .\templates\basta\round.html:16
 msgid "Start your play"
 msgstr "Empieza tu jugada"
+
+#: .\templates\basta\round.html:19
+msgid "Please log in to start playing!"
+msgstr "Selecciona Log in para iniciar a jugar!"
 
 #: .\templates\basta\round.html:23
 msgid "Return to session"
@@ -278,3 +283,77 @@ msgstr "Sesiones concluidas:"
 #: .\templates\basta\start.html:105
 msgid "Cannot join"
 msgstr "Acceso bloqueado"
+
+#: .\templates\registration\logged_out.html:4
+msgid "Logged out"
+msgstr "Abandonar la sesión"
+
+#: .\templates\registration\logged_out.html:5
+msgid "Click here to login again."
+msgstr "Haz click aquí para hace login"
+
+#: .\templates\registration\login.html:6
+msgid "Your username and password didn't match. Please try again."
+msgstr ""
+"El nombre de usuario y la contraseña no coinciden. Porfavor intenta "
+"nuevamente."
+
+#: .\templates\registration\login.html:14
+msgid "Please login to see this page."
+msgstr "Porfavor haz login para acceder a esta página"
+
+#: .\templates\registration\login.html:47
+msgid "Did you forget your password?"
+msgstr "Olvidaste tu contraseña?"
+
+#: .\templates\registration\password_reset_complete.html:4
+msgid "The password has been changed!"
+msgstr "Haz cambiado tu contraseña!"
+
+#: .\templates\registration\password_reset_complete.html:5
+msgid "Log in again?"
+msgstr "Desea conectarse nuevamente?"
+
+#: .\templates\registration\password_reset_confirm.html:5
+msgid "Please enter (and confirm) your new password."
+msgstr "Porfavor escriba (y confirme) su nueva contraseña."
+
+#: .\templates\registration\password_reset_confirm.html:11
+msgid "New password:"
+msgstr "Nueva contraseña:"
+
+#: .\templates\registration\password_reset_confirm.html:16
+msgid "Confirm password:"
+msgstr "Confirme contraseña:"
+
+#: .\templates\registration\password_reset_confirm.html:26
+msgid "Password reset failed"
+msgstr "Reseteo de contraseña fallido"
+
+#: .\templates\registration\password_reset_confirm.html:27
+msgid ""
+"The password reset link was invalid, possibly because it has already been "
+"used. Please request a new password reset."
+msgstr ""
+"El link para resetear la contraseña no es válido, es posible que ya haya "
+"sido utilizado. Porfavor requerir un nuevo reseteo de la contraseña."
+
+#: .\templates\registration\password_reset_done.html:4
+msgid ""
+"We've emailed you instructions for setting your password. If they haven't "
+"arrived in a few minutes, check your spam folder."
+msgstr ""
+"Se han enviado nuevas instrucciones para establecer su contraseña a su e-"
+"mail. Si no ha recibido ningún e-mail, favor de revisar su spam."
+
+#: .\templates\registration\password_reset_email.html:1
+msgid "Basta app"
+msgstr "Basta app"
+
+#: .\templates\registration\password_reset_email.html:3
+msgid "Someone asked for password reset for email"
+msgstr "Alguien pidió un e-mail para resetear la contraseña."
+
+#: .\templates\registration\password_reset_email.html:7
+msgid "Follow the link below:"
+msgstr "Seleccione el siguiente link:"
