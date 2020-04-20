@@ -15,14 +15,17 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.conf.urls.i18n import i18n_patterns
+from django.contrib.sitemaps.views import sitemap
 from .views import SignupView
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include("basta.urls", namespace="basta")),
 ]
-urlpatterns += [
+
+urlpatterns += i18n_patterns(
+    path('', include("basta.urls", namespace="basta")),
     path('accounts/signup/', SignupView.as_view(), name='signup'),
     path('accounts/', include('django.contrib.auth.urls')),
-]
+)
