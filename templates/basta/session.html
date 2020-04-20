@@ -1,127 +1,129 @@
-{% extends "base.html" %} 
+{% extends "base.html" %}
 {% load i18n %}
 
 {% block title %}
 {% trans "Session" %} {{ session.name }}
-{% endblock %} 
+{% endblock %}
 
 {% block content %}
 <div class="jumbotron">
-<h3> {{session.name}}</h3>
+  <h3> {{session.name}}</h3>
 
-{% if session.active %}
+  {% if session.active %}
   <a role="button" class="btn btn-primary my-3" href="{% url 'basta:roundcreate' session.slug %}">
-  {% trans "Start new round" %}
+    {% trans "Start new round" %}
   </a>
 
   <a role="button" class="btn btn-primary my-3" href="{% url 'basta:sessionclose' session.slug %}">
-  {% trans "Close this session" %}
+    {% trans "Close this session" %}
   </a>
-{% endif %}
+  {% endif %}
 </div>
 
 <h5> {% trans "Active rounds:"%} </h5>
 
 <table class="table">
-<thead> 
-  <tr>
-    <th scope="col">#</th>
-    <th scope="col">{% trans "Participants" %}</th>
-    <th scope="col"></th>
-  </tr>
-</thead>
-<tbody>
-{% for round in session.round_set.all %}
-{% if round.active %}
-  <tr>
-    <th scope="row">{{ round.number }}</th>
-    <td><ul>
-    {% for participant in round.participants %}
-    <li> {{ participant }} </li>
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">{% trans "Participants" %}</th>
+      <th scope="col"></th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for round in session.round_set.all %}
+    {% if round.active %}
+    <tr>
+      <th scope="row">{{ round.number }}</th>
+      <td>
+        <ul>
+          {% for participant in round.participants %}
+          <li> {{ participant }} </li>
+          {% empty %}
+          {%trans "No participants"%}
+          {% endfor %}
+        </ul>
+      </td>
+      <td>
+        <a role="button" class="btn btn-primary" href="{% url "basta:round" slug=session.slug number=round.number %}">
+          {% trans "Join" %}
+        </a>
+      </td>
+    </tr>
+    {% endif %}
     {% empty %}
-    {%trans "No participants"%}
+    <p>
+      {% trans "No sessions available" %}
+    </p>
     {% endfor %}
-    </ul></td>
-    <td>
-      <a role="button" class="btn btn-primary" href="{% url "basta:round" slug=session.slug number=round.number %}">
-        {% trans "Join" %}
-      </a>
-    </td>
-  </tr>
-{% endif %}
-{% empty %}
-<p>
-{% trans "No sessions available" %}
-</p>
-{% endfor %}
-</tbody>
+  </tbody>
 </table>
 
 
 <h5> {% trans "Closed rounds:"%} </h5>
 
 <table class="table">
-<thead> 
-  <tr>
-    <th scope="col">#</th>
-    <th scope="col">{% trans "Letter" %}</th>
-    <th scope="col">{% trans "Winner" %}</th>
-    <th scope="col">{% trans "Score" %}</th>
-    <th scope="col"></th>
-  </tr>
-</thead>
-<tbody>
-{% for round in session.round_set.all %}
-{% if not round.active %}
-  <tr>
-    <th scope="row">{{ round.number }}</th>
-    <td>{{ round.letter }}</td>
-    {% for winner, score in round.get_winner_score.items %}
-      <td><i class="fas fa-crown"> {{ winner }}</td>
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">{% trans "Letter" %}</th>
+      <th scope="col">{% trans "Winner" %}</th>
+      <th scope="col">{% trans "Score" %}</th>
+      <th scope="col"></th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for round in session.round_set.all %}
+    {% if not round.active %}
+    <tr>
+      <th scope="row">{{ round.number }}</th>
+      <td>{{ round.letter }}</td>
+      {% for winner, score in round.get_winner_score.items %}
+      <td><i class="fas fa-crown"></i> {{ winner }}</td>
       <td>{{ score }}</td>
-    {% empty %}
-    <td>{%trans "No participants"%}</td>
-    <td>{%trans "No participants"%}</td>
-    {% endfor %}
-    <td>
-      <a role="button" class="btn btn-primary" href="{% url "basta:round" slug=session.slug number=round.number %}">
-        {% trans "View" %}
-      </a>
-    </td>
+      {% empty %}
+      <td>{%trans "No participants"%}</td>
+      <td>{%trans "No participants"%}</td>
+      {% endfor %}
+      <td>
+        <a role="button" class="btn btn-primary" href="{% url "basta:round" slug=session.slug number=round.number %}">
+          {% trans "View" %}
+        </a>
+      </td>
 
-  </tr>
-{% endif %}
-{% empty %}
-<p>
-{% trans "No sessions available" %}
-</p>
-{% endfor %}
-</tbody>
+    </tr>
+    {% endif %}
+    {% empty %}
+    <p>
+      {% trans "No sessions available" %}
+    </p>
+    {% endfor %}
+  </tbody>
 </table>
 
 <h5> {% trans "Scoreboard:"%} </h5>
 
 <table class="table">
-<thead> 
-  <tr>
-    <th scope="col">{% trans "Participant" %}</th>
-    <th scope="col">{% trans "Total score" %}</th>
-  </tr>
-</thead>
-<tbody>
-{% for participant, score in session.get_scores.items %}
-{% if not round.active %}
-  <tr>
-    <th scope="row">{{ participant }}</th>
-    <td>{{ score }}</td>
-  </tr>
-{% endif %}
-{% empty %}
-<p>
-{% trans "No sessions available" %}
-</p>
-{% endfor %}
-</tbody>
+  <thead>
+    <tr>
+      <th scope="col">{% trans "Participant" %}</th>
+      <th scope="col">{% trans "Total score" %}</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for participant, score in session.get_scores.items %}
+    {% if not round.active %}
+    <tr>
+      <th scope="row">{{ participant }}</th>
+      <td>{{ score }}</td>
+    </tr>
+    {% endif %}
+    {% empty %}
+    <p>
+      {% trans "No sessions available" %}
+    </p>
+    {% endfor %}
+  </tbody>
 </table>
 
 {% endblock %}

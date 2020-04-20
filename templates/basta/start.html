@@ -1,4 +1,4 @@
-{% extends "base.html" %} 
+{% extends "base.html" %}
 {% load i18n %}
 
 {% block content %}
@@ -6,107 +6,109 @@
 <h3> {% trans "Welcome to Basta online" %} </h3>
 
 <div class="jumbotron">
-<h5> {%trans "Create new game session:"%} </h5>
-<form method="POST" action="{% url 'basta:sessioncreate' %}">
-{% csrf_token %}
-  <div class="form-group">
-    <label for="session_name">{%trans "Session name"%}</label>
-    <input type="text" class="form-control" name="session_name" aria-describedby="nameHelp" populate="">
-    <small id="nameHelp" class="form-text text-muted">
+  <h5> {%trans "Create new game session:"%} </h5>
+  <form method="POST" action="{% url 'basta:sessioncreate' %}">
+    {% csrf_token %}
+    <div class="form-group">
+      <label for="session_name">{%trans "Session name"%}</label>
+      <input type="text" class="form-control" name="session_name" aria-describedby="nameHelp" populate="">
+      <small id="nameHelp" class="form-text text-muted">
         {%trans "Insert a name for the new session, cannot be duplicate"%}
-    </small>
-  </div>
-  <button type="submit" class="btn btn-primary">{%trans "Start"%}</button>
-</form>
+      </small>
+    </div>
+    <button type="submit" class="btn btn-primary">{%trans "Start"%}</button>
+  </form>
 </div>
 
 <h5> {% trans "Active sessions:"%} </h5>
 
 <table class="table">
-<thead> 
-  <tr>
-    <th scope="col">#</th>
-    <th scope="col">{% trans "Name" %}</th>
-    <th scope="col">{% trans "Participants" %}</th>
-    <th scope="col">{% trans "Date" %}</th>
-    <th scope="col">{% trans "N. rounds" %}</th>
-    <th scope="col"></th>
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">{% trans "Name" %}</th>
+      <th scope="col">{% trans "Participants" %}</th>
+      <th scope="col">{% trans "Date" %}</th>
+      <th scope="col">{% trans "N. rounds" %}</th>
+      <th scope="col"></th>
 
-  </tr>
-</thead>
-<tbody>
-{% for session in sessions %}
-{% if session.active %}
-  <tr>
-    <th scope="row">{{ session.pk }}</th>
-    <td>{{ session.name }}</td>
-    <td><ul>
-    {% for participant in session.participants %}
-    <li> {{participant}} </li>
+    </tr>
+  </thead>
+  <tbody>
+    {% for session in sessions %}
+    {% if session.active %}
+    <tr>
+      <th scope="row">{{ session.pk }}</th>
+      <td>{{ session.name }}</td>
+      <td>
+        <ul>
+          {% for participant in session.participants %}
+          <li> {{participant}} </li>
+          {% empty %}
+          {%trans "No participants yet"%}
+          {% endfor %}
+        </ul>
+      </td>
+      <td>{{ session.created_at.date }}</td>
+      <td>{{ session.n_rounds }}</td>
+      <td>
+        <a role="button" class="btn btn-primary" href="{% url 'basta:session' session.slug %}">
+          {% trans "Join" %}
+        </a>
+      </td>
+    </tr>
+    {% endif %}
     {% empty %}
-    {%trans "No participants yet"%}
+    <p>
+      {% trans "No sessions available" %}
+    </p>
     {% endfor %}
-    </ul></td>
-    <td>{{ session.created_at.date }}</td>
-    <td>{{ session.n_rounds }}</td>
-    <td> 
-      <a role="button" class="btn btn-primary" href="{% url 'basta:session' session.slug %}">
-        {% trans "Join" %}
-      </a>
-    </td>
-  </tr>
-{% endif %}
-{% empty %}
-<p>
-{% trans "No sessions available" %}
-</p>
-{% endfor %}
-</tbody>
+  </tbody>
 </table>
 <h5> {%trans "Closed sessions:"%} </h5>
 
 <table class="table">
-<thead> 
-  <tr>
-    <th scope="col">#</th>
-    <th scope="col">{% trans "Name" %}</th>
-    <th scope="col">{% trans "Winner" %}</th>
-    <th scope="col">{% trans "Points" %}</th>
-    <th scope="col">{% trans "Date" %}</th>
-    <th scope="col">{% trans "N. rounds" %}</th>
-    <th></th>
-  </tr>
-</thead>
-<tbody>
-{% for session in sessions %}
-{% if not session.active %}
-  <tr>
-    <th scope="row">{{ session.pk }}</th>
-    <td>{{ session.name }}</td>
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">{% trans "Name" %}</th>
+      <th scope="col">{% trans "Winner" %}</th>
+      <th scope="col">{% trans "Points" %}</th>
+      <th scope="col">{% trans "Date" %}</th>
+      <th scope="col">{% trans "N. rounds" %}</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for session in sessions %}
+    {% if not session.active %}
+    <tr>
+      <th scope="row">{{ session.pk }}</th>
+      <td>{{ session.name }}</td>
 
-    {% for winner, score in session.get_winner_score.items %}
-    <td class="text-center"><i class="fas fa-crown"></i><br>{{winner}}</td>
-    <td>{{score}}</td>
-    {% empty %}
-    <td>{%trans "No participants"%}</td>
-    <td>{%trans "No participants"%}</td>
-    {% endfor %} 
+      {% for winner, score in session.get_winner_score.items %}
+      <td class="text-center"><i class="fas fa-crown"></i><br>{{winner}}</td>
+      <td>{{score}}</td>
+      {% empty %}
+      <td>{%trans "No participants"%}</td>
+      <td>{%trans "No participants"%}</td>
+      {% endfor %}
 
-    <td>{{ session.modified_at.date }}</td>
-    <td>{{ session.n_rounds }}</td>
-    <td>
-      <a role="button" class="btn btn-primary" href="{% url 'basta:session' session.slug %}">
+      <td>{{ session.modified_at.date }}</td>
+      <td>{{ session.n_rounds }}</td>
+      <td>
+        <a role="button" class="btn btn-primary" href="{% url 'basta:session' session.slug %}">
           {% trans "View" %}
-      </a>
-    </td>
-  </tr>
-{% endif %}
-{% empty %}
-<p>
-{% trans "No sessions available" %}
-</p>
-{% endfor %}
-</tbody>
+        </a>
+      </td>
+    </tr>
+    {% endif %}
+    {% empty %}
+    <p>
+      {% trans "No sessions available" %}
+    </p>
+    {% endfor %}
+  </tbody>
 </table>
 
 {% endblock %}

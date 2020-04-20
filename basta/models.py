@@ -6,7 +6,7 @@ from django.utils.text import slugify
 from django.utils.timezone import now
 from random import choice
 import string
-from .utils import validate_letter
+from .base.utils import validate_starts
 from .base.models import TimeStampable
 
 # Create your models here.
@@ -105,14 +105,10 @@ class Round(models.Model):
             return {winner: scores[winner]}
         else:
             return {}
-
-    @property
-    def total_score(self):
-        return sum(get_scores.values())
     
     def get_letter(self):
         taken_letters = self.session.round_set\
-                            .filter(active=False)\
+                            .all()\
                             .values_list('letter', flat=True)
         letters = list(string.ascii_lowercase)
         avail_letters = [l for l in letters if l not in taken_letters]
@@ -189,14 +185,14 @@ class Play(models.Model):
 
     def clean(self):
         "Define validations on word values"
-        self.play_validate_letter()
+        self.play_validate_starts()
 
-    def play_validate_letter(self):
+    def play_validate_starts(self):
         letter = self.cur_round.letter
         for category in ["name", "surname", "plant", "animal",
                          "place", "film", "obj", "brand"]:
             word = self.__getattribute__(category)
-        return validate_letter(letter, word)
+            validate_starts(letter, word)
     class Meta:
         verbose_name = _("Play")
         verbose_name_plural = _("Plays")
