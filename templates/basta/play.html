@@ -38,23 +38,6 @@
         </div>
     {% endfor %}    
     
-    <script>
-        $("form :input").change(function(){
-            var form = $(this).closest("form");
-            var dataString = form.serialize();
-            $.ajax({
-                type: "POST"
-                url: "{{ request.path }}",
-                data: dataString,
-                dataType: "json",
-                success: function update_play() {
-                    console.log("AJAX call succeeded with the following data:")
-                    console.log(dataString)
-                }
-                error: function () {}
-            })
-        });
-    </script>
 
     <div class="row justify-content-start">
         <input type="submit" name="Stop" value="{% trans "Stop" %}" class="btn btn-primary">
@@ -64,4 +47,24 @@
 
 </div>
 
+<script>
+    $("form :input").change(function(){
+        console.log("A field was changed");
+        var form = $(this).closest("form");
+        var dataString = form.serialize();
+        $.ajax({
+            type: "POST",
+            url: window.location.href,
+            data: dataString,
+            dataType: "json",
+            success: function () {
+                console.log("AJAX call succeeded with the following data:");
+                console.log(dataString)
+            },
+            error: function () {
+                console.log("Something went wrong")
+            }
+        });
+    });
+</script>
 {% endblock %}

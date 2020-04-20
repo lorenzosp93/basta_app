@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect, reverse, HttpResponseRedirect
+from django.shortcuts import render, redirect, reverse
 from django.views.generic import ListView, DetailView, UpdateView
 from django.utils.translation import gettext as _
 from django.contrib.auth.models import User
@@ -20,30 +20,35 @@ class PlayView(AjaxableResponseMixin, UpdateView):
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         form = self.get_form()
-        self.form_logic(request, form)
+        return self.form_logic(request, form)
 
     def form_logic(self, request, form):
         "Defines the logic of what to do when a POST request is received"
-        breakpoint()
         if form.instance.cur_round.active:
             if form.is_valid():
                 if request.POST.get("Stop"):
-                    return upon_valid_stop(form)
-                form.save()
+                    return self.upon_valid_stop(form)
+                return self.form_valid(form)
             else:
-                return self.form_invalid(self, form)
+                return self.form_invalid(form)
         else:
             return self.finish_round(form)
+    
+
 
     def upon_valid_stop(self, form):
         "Trigger for when player hits the Stop button"
-        form.instance.cur_round.active = False
+        round_ = form.instance.cur_round
+        round_.active = False
+        round_.save()
         return self.finish_round(form)
 
     def finish_round(self, form):
-        return HttpResponseRedirect(self.get_success_url(form))
+        return redirect(self.get_success_url(form))
 
-    def get_success_url(self, form):
+    def get_success_url(self, form=None):
+        if not form:
+            form = self.get_form()
         round_ = form.instance.cur_round
         return reverse("basta:round", kwargs={
             "slug":round_.session.slug,
@@ -58,6 +63,23 @@ class RoundView(AjaxableResponseMixin, DetailView):
     def get_object(self):
         session = Session.objects.get(slug=self.kwargs.get('slug'))
         return Round.objects.get(session=session, number=self.kwargs.get('number'))
+
+    def get_context_data(self, **kwargs):
+        user = kwargs.pop('user')
+        context = super().get_context_data(**kwargs)
+        try:    
+            user_play = user.play_set.get(cur_round=self.object)
+        except:
+            user_play = None
+        context.update({'my_play': user_play})
+        return context
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        user = request.user
+        context = self.get_context_data(object=self.object, user=user)
+        return self.render_to_response(context)
+        
     
 class SessionView(DetailView):
     template_name = "basta/session.html"
@@ -87,6 +109,22 @@ def play_create(request, slug, number):
                 reverse('basta:round', kwargs={'slug':slug, 'number':number}), 
                 context={'error': _('User is not authenticated')}
             )
+
+def play_score(request, slug, number):
+    session = Session.objects.get(slug=slug)
+    round_ = Round.objects.get(number=number, session=session)
+    user = request.user
+    play = Play.objects.get(
+        cur_round=round_,
+        user=user,
+    )
+    if not play.score > 0:
+        score = request.POST.get('score', '0')
+        play.score = int(score)
+        play.save(update_fields=["score"])
+    return redirect(
+        reverse('basta:round', kwargs={'slug':slug, 'number':number})
+    )
 
 def round_create(request, slug):
     session = Session.objects.get(slug=slug)

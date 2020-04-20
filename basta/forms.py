@@ -12,5 +12,6 @@ class PlayForm(forms.ModelForm):
                 'id': fieldname, 
                 'required': False,
                 'class': "form-control",
+                'autocomplete': 'off'
             }) for fieldname in Play.__dict__.keys()
         }
