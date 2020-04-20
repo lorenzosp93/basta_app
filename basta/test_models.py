@@ -144,4 +144,10 @@ class TestBastaModels(TestCase):
             set([self.user, user2])
         )
     
+    def test_get_winner_score(self):
+        play1, play2 = self.set_up_scores()
+        self.assertDictEqual(
+            self.session.get_winner_score,
+            {play2.user.username: 5}
+        )
     
