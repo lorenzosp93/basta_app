@@ -286,7 +286,7 @@ msgstr ""
 
 #: .\templates\registration\logged_out.html:5
 msgid "Logged out"
-msgstr "Abandonar la sesión"
+msgstr "Abandonaste la sesión"
 
 #: .\templates\registration\logged_out.html:6
 msgid "Click here to login again."
