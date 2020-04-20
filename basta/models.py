@@ -90,8 +90,6 @@ class Round(models.Model):
         scores = self.get_scores
         winner = max(scores.keys(), key=(lambda key: scores[key]))
         return {winner: scores[winner]}
-    
-    
 
     @property
     def total_score(self):
