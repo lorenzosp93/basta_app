@@ -17,7 +17,7 @@ class Session(TimeStampable):
     )
     name = models.TextField(
         verbose_name=_("Session name"),
-        max_length=30,
+        max_length=50,
         blank=True,
     )
     slug = models.SlugField(
