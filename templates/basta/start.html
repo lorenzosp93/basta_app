@@ -70,8 +70,8 @@
   <tr>
     <th scope="col">#</th>
     <th scope="col">{% trans "Name" %}</th>
-    <th scope="col">{% trans "Participants" %}</th>
     <th scope="col">{% trans "Winner" %}</th>
+    <th scope="col">{% trans "Points" %}</th>
     <th scope="col">{% trans "Date" %}</th>
     <th scope="col">{% trans "N. rounds" %}</th>
     <th></th>
@@ -84,22 +84,21 @@
     <th scope="row">{{ session.pk }}</th>
     <td>{{ session.name }}</td>
 
-    <td><ul>
-    {% for participant in session.participants %}
-    <li> {{participant}} </li>
-    {% empty %}
-    {%trans "No participants"%}
-    {% endfor %}
-    </ul></td>
-    <td>
     {% for winner, score in session.get_winner_score.items %}
-    <i class="fas fa-crown"></i>{{winner}} - {{score}}
+    <td class="text-center"><i class="fas fa-crown"></i><br>{{winner}}</td>
+    <td>{{score}}</td>
+    {% empty %}
+    <td>{%trans "No participants"%}</td>
+    <td>{%trans "No participants"%}</td>
     {% endfor %} 
-    </td>
+
     <td>{{ session.modified_at.date }}</td>
     <td>{{ session.n_rounds }}</td>
-    <td>{% trans "Cannot join"%}</td>
-
+    <td>
+      <a role="button" class="btn btn-primary" href="{% url 'basta:session' session.slug %}">
+          {% trans "View" %}
+      </a>
+    </td>
   </tr>
 {% endif %}
 {% empty %}

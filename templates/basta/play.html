@@ -48,9 +48,12 @@
 </div>
 
 <script>
-    $("form :input").change(function(){
-        console.log("A field was changed");
-        var form = $(this).closest("form");
+    $("form :input").change(ajax_submit);
+
+    window.setInterval(ajax_submit, 1000)
+
+    function ajax_submit(){
+        var form = $("form");
         var dataString = form.serialize();
         $.ajax({
             type: "POST",
@@ -59,15 +62,16 @@
             dataType: "json",
             success: function (resp) {
                 console.log("AJAX call succeeded with the following data:");
-                console.log(dataString)
+                console.log(dataString);
                 if(resp.stop){
-                    form.submit()
-                }
+                    form.submit();
+                    window.clearinterval
+                };
             },
             error: function () {
-                console.log("Something went wrong")
+                console.log("Something went wrong");
             }
         });
-    });
+    }
 </script>
 {% endblock %}
