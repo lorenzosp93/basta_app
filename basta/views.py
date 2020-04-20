@@ -102,7 +102,7 @@ def play_create(request, slug, number):
     session = Session.objects.get(slug=slug)
     round_ = Round.objects.get(number=number, session=session)
     user = request.user
-    if user and not round_.play_set.filter(user=user):
+    if user and not round_.play_set.filter(user=user) and round_.active:
         new_play = Play.objects.create(
             cur_round=round_,
             user=user
@@ -113,9 +113,7 @@ def play_create(request, slug, number):
         }))
     else:
         return redirect(
-                reverse('basta:round', kwargs={'slug':slug, 'number':number}), 
-                context={'error': _('User is not authenticated')}
-            )
+                reverse('basta:round', kwargs={'slug':slug, 'number':number}))
 
 @login_required
 def play_score(request, slug, number):
@@ -137,7 +135,7 @@ def play_score(request, slug, number):
 @login_required
 def round_create(request, slug):
     session = Session.objects.get(slug=slug)
-    if not session.round_set.filter(active=True):
+    if not session.round_set.filter(active=True) and session.active:
         new_round = Round.objects.create(
             session=session,
         )
