@@ -4,6 +4,8 @@ from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
 from django.utils.text import slugify
 from django.utils.timezone import now
+from random import choice
+import string
 from .utils import validate_letter
 from .base.models import TimeStampable
 
@@ -79,6 +81,7 @@ class Round(models.Model):
         max_length=1,
         verbose_name=_("Letter"),
         editable=False,
+        blank=True,
     )
     active = models.BooleanField(
         verbose_name=_("Is round active?"),
@@ -106,12 +109,22 @@ class Round(models.Model):
     @property
     def total_score(self):
         return sum(get_scores.values())
+    
+    def get_letter(self):
+        taken_letters = self.session.round_set\
+                            .filter(active=False)\
+                            .values_list('letter', flat=True)
+        letters = list(string.ascii_lowercase)
+        avail_letters = [l for l in letters if l not in taken_letters]
+        return choice(avail_letters)
 
     def save(self, *args, **kwargs):
         "Override save function to calculate the round number"
+        self.letter = self.get_letter()
         if self.pk == None:
             self.number = self.session.round_set.count() + 1
         super().save(*args, **kwargs)
+    
 
     class Meta:
         verbose_name = _("Round")
@@ -187,5 +200,4 @@ class Play(models.Model):
     class Meta:
         verbose_name = _("Play")
         verbose_name_plural = _("Plays")
-
-
+        unique_together = ['cur_round', 'user']

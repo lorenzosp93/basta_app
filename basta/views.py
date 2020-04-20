@@ -1,8 +1,10 @@
 from django.shortcuts import render, redirect, reverse
+from django.http import JsonResponse
 from django.views.generic import ListView, DetailView, UpdateView
 from django.utils.translation import gettext as _
 from django.contrib.auth.models import User
 from random import randint
+import json
 from .base.views import AjaxableResponseMixin
 from .forms import PlayForm
 from .models import Round, Session, Play
@@ -44,6 +46,8 @@ class PlayView(AjaxableResponseMixin, UpdateView):
         return self.finish_round(form)
 
     def finish_round(self, form):
+        if self.request.is_ajax():
+            return JsonResponse({"stop":True}, status=200)
         return redirect(self.get_success_url(form))
 
     def get_success_url(self, form=None):
@@ -128,10 +132,8 @@ def play_score(request, slug, number):
 
 def round_create(request, slug):
     session = Session.objects.get(slug=slug)
-    letter = chr(65 + randint(0,25))
-    if not letter in session.round_set.values() and not session.round_set.filter(active=True):
+    if not session.round_set.filter(active=True):
         new_round = Round.objects.create(
-            letter = letter,
             session=session,
         )
         return redirect(reverse("basta:round", kwargs={
@@ -139,10 +141,7 @@ def round_create(request, slug):
             'number':new_round.number
         }))
     else:
-        return redirect(
-                reverse('basta:session', kwargs={'slug':slug}), 
-                context={'error': _('Letter %(letter)s' % {'letter': letter})}
-            )
+        return redirect(reverse('basta:session', kwargs={'slug':slug}))
 
 def session_create(request):
     name = request.POST.get('session_name', '')

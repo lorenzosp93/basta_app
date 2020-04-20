@@ -2,13 +2,13 @@
 {% load i18n %}
 
 {% block title %}
-{% trans "Round #" %}{{ round.number }}
+{% trans "Round #" %} {{ round.number }}
 {% endblock %} 
 
 {% block content %}
 
 <div class="jumbotron">
-<h3> {% trans "Round #" %}{{ round.number }} </h3>
+<h3> {% trans "Round #" %} {{ round.number }} </h3>
 
 {% if round.active %}
   {% if user.is_authenticated %}
