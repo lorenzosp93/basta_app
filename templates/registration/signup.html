@@ -4,25 +4,25 @@
 {% load i18n %}
 <h3>{%trans "Sign up"%}</h3>
 <form method="post">
-{% csrf_token %}
-{% for field in form.visible_fields %} 
+    {% csrf_token %}
+    {% for field in form.visible_fields %}
     <div class="form-group row p-0">
         <label class="col-sm-4 col-lg-2 col-form-label">
-        {% trans field.label_tag %}  
+            {% trans field.label_tag %}
         </label>
         <div class="col-sm-8 col-lg-10">
             {{ field }}
-            {% if field.help_text %} 
-                <small class="form-text text-muted help">
-                {% trans field.help_text|safe %}  
-                </small>
-                <span class="text-danger">
+            {% if field.help_text %}
+            <small class="form-text text-muted help">
+                {% trans field.help_text|safe %}
+            </small>
+            <span class="text-danger">
                 {% trans field.errors.as_text|cut:'* ' %}
-                </span>
-            {% endif %} 
+            </span>
+            {% endif %}
         </div>
     </div>
-{% endfor %}
+    {% endfor %}
     <button class="btn btn-primary m-3" type="submit">{%trans "Sign up"%}</button>
-  </form>
+</form>
 {% endblock %}

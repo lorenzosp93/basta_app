@@ -3,6 +3,7 @@ from django.http import JsonResponse
 from django.views.generic import ListView, DetailView, UpdateView
 from django.utils.translation import gettext as _
 from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
 from random import randint
 import json
 from .base.views import AjaxableResponseMixin
@@ -10,6 +11,7 @@ from .forms import PlayForm
 from .models import Round, Session, Play
 
 # Create your views here.
+
 class PlayView(AjaxableResponseMixin, UpdateView):
     template_name = "basta/play.html"
     form_class = PlayForm
@@ -18,6 +20,10 @@ class PlayView(AjaxableResponseMixin, UpdateView):
         session = Session.objects.get(slug=self.kwargs.get('slug'))
         round_ = Round.objects.get(session=session, number=self.kwargs.get('number'))
         return round_.play_set.get(user=self.request.user)
+    
+    @login_required
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
@@ -36,8 +42,6 @@ class PlayView(AjaxableResponseMixin, UpdateView):
         else:
             return self.finish_round(form)
     
-
-
     def upon_valid_stop(self, form):
         "Trigger for when player hits the Stop button"
         round_ = form.instance.cur_round
@@ -83,8 +87,7 @@ class RoundView(AjaxableResponseMixin, DetailView):
         user = request.user
         context = self.get_context_data(object=self.object, user=user)
         return self.render_to_response(context)
-        
-    
+
 class SessionView(DetailView):
     template_name = "basta/session.html"
     model = Session

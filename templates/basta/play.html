@@ -1,49 +1,49 @@
-{% extends "base.html" %} 
+{% extends "base.html" %}
 {% load i18n %}
 {% block title %}
 {% trans "Round:" %} {{ form.instance.cur_round.letter }}
-{% endblock %} 
+{% endblock %}
 
 {% block content %}
 <div class="container">
-<h1 class="jumbotron text-center m-3">
-    {% trans "Letter: "%} {{ form.instance.cur_round.letter }}
-</h1>
+    <h1 class="jumbotron text-center m-3">
+        {% trans "Letter: "%} {{ form.instance.cur_round.letter }}
+    </h1>
 
-<form method="post">
-    {% if error %} 
+    <form method="post">
+        {% if error %}
         <div class="alert-danger" role="alert">
-        {{ error }} 
+            {{ error }}
         </div>
         <br><br>
-    {% endif %}
+        {% endif %}
 
-    {% csrf_token %}
-    {% for field in form.visible_fields %} 
+        {% csrf_token %}
+        {% for field in form.visible_fields %}
         <div class="form-group row p-0">
             <label class="col-sm-4 col-lg-2 col-form-label">
-            {% trans field.label_tag %}  
+                {% trans field.label_tag %}
             </label>
             <div class="col-sm-8 col-lg-10">
                 {{ field }}
-                {% if field.help_text %} 
-                    <small class="form-text text-muted help">
-                    {% trans field.help_text|safe %}  
-                    </small>
-                    <span class="text-danger">
+                {% if field.help_text %}
+                <small class="form-text text-muted help">
+                    {% trans field.help_text|safe %}
+                </small>
+                <span class="text-danger">
                     {% trans field.errors.as_text|cut:'* ' %}
-                    </span>
-                {% endif %} 
+                </span>
+                {% endif %}
             </div>
         </div>
-    {% endfor %}    
-    
+        {% endfor %}
 
-    <div class="row justify-content-start">
-        <input type="submit" name="Stop" value="{% trans "Stop" %}" class="btn btn-primary">
-    </div>
 
-</form>
+        <div class="row justify-content-start">
+            <input type="submit" name="Stop" value="{% trans "Stop" %}" class="btn btn-primary">
+        </div>
+
+    </form>
 
 </div>
 
@@ -52,7 +52,7 @@
 
     window.setInterval(ajax_submit, 1000)
 
-    function ajax_submit(){
+    function ajax_submit() {
         var form = $("form");
         var dataString = form.serialize();
         $.ajax({
@@ -63,7 +63,7 @@
             success: function (resp) {
                 console.log("AJAX call succeeded with the following data:");
                 console.log(dataString);
-                if(resp.stop){
+                if (resp.stop) {
                     form.submit();
                     window.clearinterval
                 };
