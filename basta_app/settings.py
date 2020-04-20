@@ -81,9 +81,9 @@ LOCALE_PATHS = (
 )
 
 LANGUAGES = (
-    ('es', 'Spanish'),
     ('en', 'English'),
-    ('it', 'Italian')
+    ('it', 'Italian'),
+    ('es', 'Spanish'),
 )
 
 

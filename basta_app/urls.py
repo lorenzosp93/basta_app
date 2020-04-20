@@ -22,6 +22,7 @@ from .views import SignupView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('i18n/', include('django.conf.urls.i18n'))
 ]
 
 urlpatterns += i18n_patterns(
