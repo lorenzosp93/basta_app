@@ -120,14 +120,14 @@ def play_create(request, slug, number):
     session = Session.objects.get(slug=slug)
     round_ = Round.objects.get(number=number, session=session)
     user = request.user
-    this_play = round_.play_set.get(user=user)
+    this_play = round_.play_set.filter(user=user)
     if user and not this_play and round_.active:
         new_play = Play.objects.create(
             round=round_,
             user=user
         )
         return redirect_play(slug, number)
-    elif this_play.active:
+    elif round_.active:
         return redirect_play(slug, number)
     else:
         return redirect_round(slug, number)

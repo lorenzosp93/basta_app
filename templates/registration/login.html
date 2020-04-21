@@ -46,5 +46,5 @@
 
 {# Assumes you setup the password_reset view in your URLconf #}
 <p class="m-2"><a href="{% url 'password_reset' %}">{%trans "Did you forget your password?"%}</a></p>
-
+<p class="m-2"><a href="{% url 'signup' %}">{% trans "Create a new account" %}</a></p>
 {% endblock %}
