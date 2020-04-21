@@ -20,7 +20,7 @@ class TestBastaModels(TestCase):
             session=self.session,
         )
         self.play = Play.objects.create(
-            cur_round=self.round,
+            round=self.round,
             user=self.user,
         )
     
@@ -35,7 +35,7 @@ class TestBastaModels(TestCase):
     
     def test_play_validate(self):
         play = copy(self.play)
-        letter = play.cur_round.letter
+        letter = play.round.letter
         play.name = letter + 'test'
         play.clean()
         next_letter = chr(ord(letter) + 1)
@@ -55,7 +55,7 @@ class TestBastaModels(TestCase):
             password='testpass2'
         )
         play2 = Play.objects.create(
-            cur_round=round_,
+            round=round_,
             user=user2,
         )
         return play1, play2

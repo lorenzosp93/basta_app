@@ -129,7 +129,7 @@ class Round(TimeStampable):
 
 class Play(TimeStampable):
     "Model to define one play for one user"
-    cur_round = models.ForeignKey(
+    round = models.ForeignKey(
         Round,
         on_delete=models.CASCADE,
         related_name="play_set"
@@ -188,7 +188,7 @@ class Play(TimeStampable):
         self.play_validate_starts()
 
     def play_validate_starts(self):
-        letter = self.cur_round.letter
+        letter = self.round.letter
         for category in ["name", "surname", "plant", "animal",
                          "place", "film", "obj", "brand"]:
             word = self.__getattribute__(category)
@@ -196,4 +196,4 @@ class Play(TimeStampable):
     class Meta:
         verbose_name = _("Play")
         verbose_name_plural = _("Plays")
-        unique_together = ['cur_round', 'user']
+        unique_together = ['round', 'user']

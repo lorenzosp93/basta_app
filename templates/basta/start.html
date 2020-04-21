@@ -80,8 +80,9 @@
     </tr>
   </thead>
   <tbody>
-    {% for session in sessions %}
+    {% for session in page_obj %}
     {% if not session.active %}
+    {% if user in session.participants or not user.is_authenticated %}
     <tr>
       <th scope="row">{{ session.pk }}</th>
       <td>{{ session.name }}</td>
@@ -103,6 +104,7 @@
       </td>
     </tr>
     {% endif %}
+    {% endif %}
     {% empty %}
     <p>
       {% trans "No sessions available" %}
@@ -110,5 +112,23 @@
     {% endfor %}
   </tbody>
 </table>
+<div class="row d-flex justify-content-center">
+  <ul class="pagination">
+    {% if page_obj.has_previous %}
+    <li class="page-item"><a class="page-link" href="?page=1">&laquo; {%trans "first"%}</a></li>
+    <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">{%trans "previous"%}</a>
+    </li>
+    {% endif %}
+
+    <li class="page-item"><a class="page-link">{%trans "page"%} {{ page_obj.number }} {%trans "of"%} {{ page_obj.paginator.num_pages }}</a></li>
+
+    {% if page_obj.has_next %}
+    <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">{%trans "next"%}</a></li>
+    <li class="page-item"><a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">{%trans "last"%}
+        &raquo;</a></li>
+    {% endif %}
+  </ul>
+</div>
+
 
 {% endblock %}

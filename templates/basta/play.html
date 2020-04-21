@@ -1,13 +1,13 @@
 {% extends "base.html" %}
 {% load i18n %}
 {% block title %}
-{% trans "Round:" %} {{ form.instance.cur_round.letter }}
+{% trans "Round:" %} {{ form.instance.round.letter|upper }}
 {% endblock %}
 
 {% block content %}
 <div class="container">
     <h1 class="jumbotron text-center m-3">
-        {% trans "Letter: "%} {{ form.instance.cur_round.letter }}
+        {% trans "Letter: "%} {{ form.instance.round.letter|upper }}
     </h1>
 
     <form method="post">

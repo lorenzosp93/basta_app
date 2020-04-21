@@ -31,7 +31,7 @@ class PlayView(AjaxableResponseMixin, UpdateView):
 
     def form_logic(self, request, form):
         "Defines the logic of what to do when a POST request is received"
-        if form.instance.cur_round.active:
+        if form.instance.round.active:
             if form.is_valid():
                 if request.POST.get("Stop"):
                     return self.upon_valid_stop(form)
@@ -43,7 +43,7 @@ class PlayView(AjaxableResponseMixin, UpdateView):
     
     def upon_valid_stop(self, form):
         "Trigger for when player hits the Stop button"
-        round_ = form.instance.cur_round
+        round_ = form.instance.round
         round_.active = False
         round_.save()
         return self.finish_round(form)
@@ -56,7 +56,7 @@ class PlayView(AjaxableResponseMixin, UpdateView):
     def get_success_url(self, form=None):
         if not form:
             form = self.get_form()
-        round_ = form.instance.cur_round
+        round_ = form.instance.round
         return reverse("basta:round", kwargs={
             "slug":round_.session.slug,
             "number":round_.number,
@@ -75,7 +75,7 @@ class RoundView(AjaxableResponseMixin, DetailView):
         user = kwargs.pop('user')
         context = super().get_context_data(**kwargs)
         try:    
-            user_play = user.play_set.get(cur_round=self.object)
+            user_play = user.play_set.get(round=self.object)
         except:
             user_play = None
         context.update({'my_play': user_play})
@@ -96,6 +96,8 @@ class SessionListView(ListView):
     template_name = "basta/start.html"
     model = Session
     context_object_name = "sessions"
+    paginate_by = 5
+    ordering = ['-created_at']
 
 @login_required
 def play_create(request, slug, number):
@@ -104,7 +106,7 @@ def play_create(request, slug, number):
     user = request.user
     if user and not round_.play_set.filter(user=user) and round_.active:
         new_play = Play.objects.create(
-            cur_round=round_,
+            round=round_,
             user=user
         )
         return redirect(reverse("basta:play", kwargs={
@@ -121,7 +123,7 @@ def play_score(request, slug, number):
     round_ = Round.objects.get(number=number, session=session)
     user = request.user
     play = Play.objects.get(
-        cur_round=round_,
+        round=round_,
         user=user,
     )
     if not play.score > 0:
