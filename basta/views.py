@@ -97,6 +97,7 @@ class SessionListView(ListView):
     model = Session
     context_object_name = "sessions"
     paginate_by = 5
+    ordering = ['-created_at']
 
 @login_required
 def play_create(request, slug, number):
