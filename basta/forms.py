@@ -6,7 +6,7 @@ from .models import Play
 class PlayForm(forms.ModelForm):
     class Meta:
         model = Play
-        exclude = ["cur_round", "user"]
+        exclude = ["round", "user"]
         widgets = {
             fieldname: forms.TextInput(attrs={
                 'id': fieldname, 

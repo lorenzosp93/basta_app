@@ -8,7 +8,7 @@ def validate_starts(letter, word):
     >>> validate_starts('a', 'airplane')
 
     """
-    if not word.startswith(letter) and word:
+    if not word.lower().startswith(letter.lower()) and word:
         raise ValidationError(
             _("%(word)s does not start with %(letter)s"),
             params={
