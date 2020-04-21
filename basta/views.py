@@ -44,8 +44,7 @@ class PlayView(AjaxableResponseMixin, UpdateView):
     def upon_valid_stop(self, form):
         "Trigger for when player hits the Stop button"
         round_ = form.instance.round
-        round_.active = False
-        round_.save()
+        object_deactivate(round_)
         return self.finish_round(form)
 
     def finish_round(self, form):
@@ -62,6 +61,9 @@ class PlayView(AjaxableResponseMixin, UpdateView):
             "number":round_.number,
         })
 
+def object_deactivate(obj):
+    obj.active = False
+    obj.save()
 class RoundView(AjaxableResponseMixin, DetailView):
     template_name = "basta/round.html"
     model = Round
@@ -99,23 +101,36 @@ class SessionListView(ListView):
     paginate_by = 5
     ordering = ['-created_at']
 
+def redirect_play(slug, number):
+    return redirect(reverse("basta:play", kwargs={
+        'slug':slug,
+        'number':number,
+    }))
+
+def redirect_round(slug, number):
+    return redirect(
+        reverse('basta:round', kwargs={'slug':slug, 'number':number})    
+    )
+
+def redirect_session(slug):
+    return redirect(reverse('basta:session', args=[slug]))
+
 @login_required
 def play_create(request, slug, number):
     session = Session.objects.get(slug=slug)
     round_ = Round.objects.get(number=number, session=session)
     user = request.user
-    if user and not round_.play_set.filter(user=user) and round_.active:
+    this_play = round_.play_set.get(user=user)
+    if user and not this_play and round_.active:
         new_play = Play.objects.create(
             round=round_,
             user=user
         )
-        return redirect(reverse("basta:play", kwargs={
-            'slug':slug,
-            'number':number,
-        }))
+        return redirect_play(slug, number)
+    elif this_play.active:
+        return redirect_play(slug, number)
     else:
-        return redirect(
-                reverse('basta:round', kwargs={'slug':slug, 'number':number}))
+        return redirect_round(slug, number)
 
 @login_required
 def play_score(request, slug, number):
@@ -130,9 +145,7 @@ def play_score(request, slug, number):
         score = request.POST.get('score', '0')
         play.score = int(score)
         play.save(update_fields=["score"])
-    return redirect(
-        reverse('basta:round', kwargs={'slug':slug, 'number':number})
-    )
+    return redirect_round(slug, number)
 
 @login_required
 def round_create(request, slug):
@@ -141,12 +154,9 @@ def round_create(request, slug):
         new_round = Round.objects.create(
             session=session,
         )
-        return redirect(reverse("basta:round", kwargs={
-            'slug':slug,
-            'number':new_round.number
-        }))
+        return redirect_round(slug, new_round.number)
     else:
-        return redirect(reverse('basta:session', kwargs={'slug':slug}))
+        return redirect_session(slug)
 
 @login_required
 def session_create(request):
@@ -154,13 +164,13 @@ def session_create(request):
     new_session = Session.objects.create(
         name=name,
     )
-    return redirect(reverse("basta:session", kwargs={'slug':new_session.slug}))
+    return redirect_session(new_session.slug)
+
 @login_required
 def session_close(request, slug):
     session = Session.objects.get(slug=slug)
-    session.active = False
-    session.save()
+    object_deactivate(session)
     for round_ in session.round_set.all():
-        round_.active = False
-        round_.save()
+        object_deactivate(round_)
     return redirect(reverse("basta:home"))
+
