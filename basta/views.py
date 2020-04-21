@@ -96,6 +96,7 @@ class SessionListView(ListView):
     template_name = "basta/start.html"
     model = Session
     context_object_name = "sessions"
+    paginate_by = 5
 
 @login_required
 def play_create(request, slug, number):
