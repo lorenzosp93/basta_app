@@ -23,6 +23,7 @@
         </div>
     </div>
     {% endfor %}
-    <button class="btn btn-primary m-3" type="submit">{%trans "Sign up"%}</button>
+    <button class="btn btn-primary m-2" type="submit">{%trans "Sign up"%}</button>
+    <input class="btn btn-secondary m-2" type="hidden" name="next" value="{{ next }}"/>
 </form>
 {% endblock %}

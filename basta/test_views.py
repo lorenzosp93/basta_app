@@ -156,8 +156,9 @@ class TestFBViews(TestCase):
         )
         request.user = self.user
         response = play_create(request, slug, number)
+        # test redirect to play since play already exists for user
         self.assertURLEqual(
-            reverse('basta:round', args=[slug, number]),
+            reverse('basta:play', args=[slug, number]),
             response.url
         )
         user2 = User.objects.create(
@@ -170,6 +171,7 @@ class TestFBViews(TestCase):
             user=user2,
             round=self.round,
         )
+        # test play creation
         self.assertIsInstance(
             play,
             Play

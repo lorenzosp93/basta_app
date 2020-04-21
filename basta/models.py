@@ -116,7 +116,8 @@ class Round(TimeStampable):
 
     def save(self, *args, **kwargs):
         "Override save function to calculate the round number"
-        self.letter = self.get_letter()
+        if not self.letter:
+            self.letter = self.get_letter()
         if self.pk == None:
             self.number = self.session.round_set.count() + 1
         super().save(*args, **kwargs)
