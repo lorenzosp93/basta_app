@@ -10,10 +10,11 @@
   <h3> {{session.name}}</h3>
 
   {% if session.active %}
-  <a role="button" class="btn btn-primary my-3" href="{% url 'basta:roundcreate' session.slug %}">
+  {% if not active_round %}
+  <a id="start-button" role="button" class="btn btn-primary my-3" href="{% url 'basta:roundcreate' session.slug %}">
     {% trans "Start new round" %}
   </a>
-
+  {% endif %}
   <a role="button" class="btn btn-primary my-3" href="{% url 'basta:sessionclose' session.slug %}">
     {% trans "Close this session" %}
   </a>
@@ -45,7 +46,8 @@
         </ul>
       </td>
       <td>
-        <a role="button" class="btn btn-primary" href="{% url "basta:round" slug=session.slug number=round.number %}">
+        <a id="join-button" role="button" class="btn btn-primary"
+          href="{% url "basta:round" slug=session.slug number=round.number %}">
           {% trans "Join" %}
         </a>
       </td>
@@ -126,6 +128,22 @@
   </tbody>
 </table>
 <script>
-    window.setInterval(ajax_submit, 5000)
+  window.setInterval(ajax_poll_refresh, 2000)
+
+  function ajax_poll_refresh() {
+    if ($("#join-button").length) {
+        window.clearInterval;
+      } else {
+      $.ajax({
+        type: "GET",
+        url: window.location.href + 'poll-refresh/',
+        success: function (resp) {
+          console.log("AJAX call succeeded");
+          location.reload();
+        },
+        error: function () {}
+      })
+    }
+  }
 </script>
 {% endblock %}

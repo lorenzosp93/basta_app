@@ -1,7 +1,9 @@
 from django.urls import path
 from .views import (
     PlayView, RoundView, SessionView, SessionListView,
-    session_create, session_close, round_create, play_create, play_score,
+    session_create, session_close,
+    round_create, play_create, play_score,
+    poll_session_refresh_view,
 )
 
 app_name = 'basta'
@@ -9,6 +11,7 @@ app_name = 'basta'
 urlpatterns = [
     path('', SessionListView.as_view(), name="home"),
     path('session/<slug:slug>/', SessionView.as_view(), name="session"),
+    path('session/<slug:slug>/poll-refresh/', poll_session_refresh_view),
     path(
         'session/<slug:slug>/round/<int:number>/',
         RoundView.as_view(),

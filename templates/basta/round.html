@@ -5,6 +5,12 @@
 {% trans "Round #" %} {{ round.number }}
 {% endblock %}
 
+{% block navlist %}
+<a class="nav-link" href="{% url 'basta:session' round.session.slug%}">
+  <i class="fas fa-chevron-right"></i> {%trans "Session"%}
+</a>
+{% endblock %}
+
 {% block content %}
 
 <div class="jumbotron">
