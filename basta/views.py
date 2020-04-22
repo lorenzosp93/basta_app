@@ -94,6 +94,23 @@ class SessionView(DetailView):
     model = Session
     context_object_name = "session"
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update({
+            'active_round': self.object.round_set.filter(active=True),
+        })
+        return context
+
+def poll_session_refresh_view(request, slug):
+    if request.is_ajax():
+        if Session.objects\
+                  .get(slug=slug)\
+                  .round_set\
+                  .filter(active=True):
+            return JsonResponse({}, status=200)
+        else:
+            return JsonResponse({}, status=404)
+
 class SessionListView(ListView):
     template_name = "basta/start.html"
     model = Session
