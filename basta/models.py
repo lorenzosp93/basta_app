@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
 from django.utils.text import slugify
 from django.utils.timezone import now
+from django.shortcuts import reverse
 from random import choice
 import string
 from .base.utils import validate_starts
@@ -26,6 +27,9 @@ class Session(TimeStampable):
         max_length=50,
         unique=True,
     )
+
+    def get_absolute_url(self):
+        return reverse("basta:session", kwargs={"slug": self.slug})
 
     @property
     def n_rounds(self):
@@ -87,6 +91,12 @@ class Round(TimeStampable):
         verbose_name=_("Is round active?"),
         default=True,
     )
+
+    def get_absolute_url(self):
+        return reverse('basta:round', kwargs={
+            'slug': self.session.slug,
+            'number': self.number,
+        })
 
     @property
     def participants(self):
@@ -183,6 +193,12 @@ class Play(TimeStampable):
     )
 
     score = models.PositiveIntegerField(editable=False, default=0)
+
+    def get_absolute_url(self):
+        return reverse("basta:play", kwargs={
+            "slug": self.round.session.slug,
+            "number": self.round.number,
+        })
 
     def clean(self):
         "Define validations on word values"
