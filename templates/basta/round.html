@@ -6,7 +6,7 @@
 {% endblock %}
 
 {% block navlist %}
-<a class="nav-link" href="{% url 'basta:session' round.session.slug%}">
+<a class="nav-link" href="{{ round.session.get_absolute_url }}">
   <i class="fas fa-chevron-right"></i> {%trans "Session"%}
 </a>
 {% endblock %}
@@ -21,7 +21,7 @@
     {% trans "Start your play" %}
   </a>
   {% else %}
-  <a role="button" class="btn btn-primary my-3" href="{% url 'basta:session' round.session.slug %}">
+  <a role="button" class="btn btn-primary my-3" href="{{ round.session.get_absolute_url }}">
     {% trans "Return to session" %}
   </a>
   {% endif %}

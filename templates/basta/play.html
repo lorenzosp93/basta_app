@@ -5,10 +5,10 @@
 {% endblock %}
 
 {% block navlist %}
-<a class="nav-link" href="{% url 'basta:session' play.round.session.slug%}">
+<a class="nav-link" href="{{ play.round.session.get_absolute_url }}">
     <i class="fas fa-chevron-right"></i> {%trans "Session"%}
 </a>
-<a class="nav-link" href="{% url 'basta:round' play.round.session.slug play.round.number %}">
+<a class="nav-link" href="{{ play.round.get_absolute_url }}">
     <i class="fas fa-chevron-right"></i> {%trans "Round"%}
 </a>
 {% endblock %}
