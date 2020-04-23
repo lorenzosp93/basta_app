@@ -34,17 +34,16 @@ class PlayView(AjaxableResponseMixin, UpdateView):
         if form.instance.round.active:
             if form.is_valid():
                 if request.POST.get("Stop"):
-                    return self.upon_valid_stop(form)
+                    return self.upon_valid_stop(form, request.user)
                 return self.form_valid(form)
             else:
                 return self.form_invalid(form)
         else:
             return self.finish_round(form)
     
-    def upon_valid_stop(self, form):
+    def upon_valid_stop(self, form, user):
         "Trigger for when player hits the Stop button"
-        round_ = form.instance.round
-        object_deactivate(round_)
+        object_deactivate(form.instance.round, user)
         return self.finish_round(form)
 
     def finish_round(self, form):
@@ -61,9 +60,10 @@ class PlayView(AjaxableResponseMixin, UpdateView):
             "number":round_.number,
         })
 
-def object_deactivate(obj):
+def object_deactivate(obj, user):
     obj.active = False
-    obj.save()
+    return obj.save(user=user)
+
 class RoundView(AjaxableResponseMixin, DetailView):
     template_name = "basta/round.html"
     model = Round
@@ -170,6 +170,8 @@ def round_create(request, slug):
     if not session.round_set.filter(active=True) and session.active:
         new_round = Round.objects.create(
             session=session,
+            created_by=request.user,
+            modified_by=request.user,
         )
         return redirect_round(slug, new_round.number)
     else:
@@ -180,14 +182,16 @@ def session_create(request):
     name = request.POST.get('session_name', '')
     new_session = Session.objects.create(
         name=name,
+        created_by=request.user,
+        modified_by=request.user,
     )
     return redirect_session(new_session.slug)
 
 @login_required
 def session_close(request, slug):
     session = Session.objects.get(slug=slug)
-    object_deactivate(session)
+    object_deactivate(session, request.user)
     for round_ in session.round_set.all():
-        object_deactivate(round_)
+        object_deactivate(round_, request.user)
     return redirect(reverse("basta:home"))
 

@@ -11,11 +11,8 @@ from .models import Play, Round, Session
 
 class TestBastaModels(TestCase):
     def setUp(self):
-        self.user = User.objects.create(
-            username="testuser1",
-            password="testpass1",
-        )
-        self.session = Session.objects.create()
+        self.user = User.objects.create_user(username="testuser1")
+        self.session = Session.objects.create(name='test session')
         self.round = Round.objects.create(
             session=self.session,
         )
@@ -23,6 +20,26 @@ class TestBastaModels(TestCase):
             round=self.round,
             user=self.user,
         )
+
+    def test_auditable(self):
+        session = Session.objects.create(
+            name = 'oldname',
+            created_by = self.user
+        )
+        user2 = User.objects.create_user(username='testuser3')
+        session.name = 'newname'
+        session.save(user=user2)
+        self.assertEqual(
+            session.created_by,
+            self.user,
+        )
+        self.assertEqual(
+            session.modified_by,
+            user2,
+        )
+    
+    def test_named(self):
+        self.assertEqual(self.session.slug, 'test-session')
     
     def test_session_create(self):
         self.assertIsInstance(self.session, Session)
@@ -50,10 +67,7 @@ class TestBastaModels(TestCase):
         if not round_:
             round_ = self.round
         play1 = copy(self.play)
-        user2 = User.objects.create(
-            username=get_random_string(length=8),
-            password='testpass2'
-        )
+        user2 = User.objects.create_user(username='testuser2')
         play2 = Play.objects.create(
             round=round_,
             user=user2,

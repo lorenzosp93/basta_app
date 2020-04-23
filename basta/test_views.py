@@ -16,10 +16,7 @@ from .forms import PlayForm
 class TestFBViews(TestCase):
     def setUp(self):
         self.factory = RequestFactory()
-        self.user = User.objects.create(
-            username="testuser1",
-            password="testpass1"
-        )
+        self.user = User.objects.create_user(username="testuser1")
         self.session = Session.objects.create(
             name='test 0',
         )
@@ -43,11 +40,12 @@ class TestFBViews(TestCase):
         )
         request.user = self.user
         response = session_create(request)
+        session = Session.objects.get(name=s_name)
         self.assertEqual(
             response.status_code, 302
         )
         self.assertIsInstance(
-            Session.objects.get(name=s_name),
+            session,
             Session
         )
         self.assertEqual(
@@ -58,6 +56,10 @@ class TestFBViews(TestCase):
                     'slug':'test-1'
                 }
             )
+        )
+        self.assertEqual(
+            self.user,
+            session.created_by
         )
     
     def test_session_close(self):
@@ -74,6 +76,7 @@ class TestFBViews(TestCase):
         self.assertFalse(session.active)
         self.assertFalse(session.round_set.first().active)
         self.assertEqual(response.status_code, 302)
+        self.assertEqual(session.modified_by, self.user)
 
     def test_round_create(self):
         slug = self.session.slug
@@ -108,6 +111,10 @@ class TestFBViews(TestCase):
                 }
             )
         )
+        self.assertEqual(
+            round_.created_by,
+            self.user
+        )
         response2 = round_create(request, slug)
         self.assertURLEqual(
             response2.url,
@@ -118,6 +125,7 @@ class TestFBViews(TestCase):
                 }
             )
         )
+        
     
     def test_play_score(self):
         slug = self.session.slug
@@ -161,10 +169,7 @@ class TestFBViews(TestCase):
             reverse('basta:play', args=[slug, number]),
             response.url
         )
-        user2 = User.objects.create(
-            username='testuser2',
-            password='testpass2'
-        )
+        user2 = User.objects.create_user(username='testuser2')
         request.user = user2
         response2 = play_create(request, slug, number)
         play = Play.objects.get(
@@ -183,10 +188,7 @@ class TestFBViews(TestCase):
 class TestCBViews(TestCase):
     def setUp(self):
         self.factory = RequestFactory()
-        self.user = User.objects.create(
-            username="testuser1",
-            password="testpass1"
-        )
+        self.user = User.objects.create_user(username="testuser1")
         self.session = Session.objects.create(
             name='test 0',
         )
@@ -234,10 +236,7 @@ class TestCBViews(TestCase):
 
     def test_round_get_user_play(self):
         view, _ = self.set_up_round_view()
-        user = User.objects.create(
-            username='username2',
-            password='password2'
-        )
+        user = User.objects.create_user(username='username2')
         play = Play.objects.create(
             round=self.round,
             user=user
@@ -331,6 +330,7 @@ class TestCBViews(TestCase):
             response.url,
             view.get_success_url(form)
         )
+        
     
     def test_play_ajax_finish_round(self):
         request = self.factory.post(
@@ -355,12 +355,16 @@ class TestCBViews(TestCase):
     def test_play_upon_valid_stop(self):
         view, _ = self.set_up_play_view()
         form = self.set_up_form()
-        response = view.upon_valid_stop(form)
+        response = view.upon_valid_stop(form, self.user)
         self.assertURLEqual(
             response.url,
             view.finish_round(form).url
         )
         self.assertFalse(self.round.active)
+        self.assertEqual(
+            self.round.modified_by,
+            self.user
+        )
 
     def test_form_logic(self):
         view, request = self.set_up_play_view()
@@ -375,7 +379,7 @@ class TestCBViews(TestCase):
         response = view.form_logic(request, form)
         self.assertURLEqual(
             response.url,
-            view.upon_valid_stop(form).url,
+            view.upon_valid_stop(form, self.user).url,
         )
 
     def test_form_logic_inactive(self):
