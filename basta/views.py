@@ -61,9 +61,10 @@ class PlayView(AjaxableResponseMixin, UpdateView):
             "number":round_.number,
         })
 
-def object_deactivate(obj):
+def object_deactivate(obj, user):
     obj.active = False
-    obj.save()
+    return obj.save(user=user)
+
 class RoundView(AjaxableResponseMixin, DetailView):
     template_name = "basta/round.html"
     model = Round
@@ -170,6 +171,8 @@ def round_create(request, slug):
     if not session.round_set.filter(active=True) and session.active:
         new_round = Round.objects.create(
             session=session,
+            created_by=request.user,
+            modified_by=request.user,
         )
         return redirect_round(slug, new_round.number)
     else:
@@ -180,6 +183,8 @@ def session_create(request):
     name = request.POST.get('session_name', '')
     new_session = Session.objects.create(
         name=name,
+        created_by=request.user,
+        modified_by=request.user,
     )
     return redirect_session(new_session.slug)
 
@@ -188,6 +193,6 @@ def session_close(request, slug):
     session = Session.objects.get(slug=slug)
     object_deactivate(session)
     for round_ in session.round_set.all():
-        object_deactivate(round_)
+        object_deactivate(round_, user=request.user)
     return redirect(reverse("basta:home"))
 

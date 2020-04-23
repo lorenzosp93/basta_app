@@ -2,31 +2,26 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
-from django.utils.text import slugify
 from django.utils.timezone import now
 from django.shortcuts import reverse
 from random import choice
 import string
 from .base.utils import validate_starts
-from .base.models import TimeStampable
+from .base.models import Auditable, TimeStampable, Named
 
 # Create your models here.
 
-class Session(TimeStampable):
+class Session(Auditable, Named):
     "Model to define a play session, participants and rules"
+    class Meta:
+        verbose_name = _("Session")
+        verbose_name_plural = _("Sessions")
+
     active = models.BooleanField(
         verbose_name=_("Is session active?"),
         default = True,
     )
-    name = models.TextField(
-        verbose_name=_("Session name"),
-        max_length=50,
-        blank=True,
-    )
-    slug = models.SlugField(
-        max_length=50,
-        unique=True,
-    )
+    
 
     def get_absolute_url(self):
         return reverse("basta:session", kwargs={"slug": self.slug})
@@ -60,19 +55,7 @@ class Session(TimeStampable):
         else:
             return {}
 
-    def save(self, *args, **kwargs):
-        "Override save function to add default for name field and slugify"
-        if not self.name:
-            self.name =  _("Game on %(date)s" % {"date": now()})
-        self.slug = slugify(self.name)
-        super().save(*args, **kwargs)
-
-    class Meta:
-        verbose_name = _("Session")
-        verbose_name_plural = _("Sessions")
-
-
-class Round(TimeStampable):
+class Round(Auditable):
     "Model to defind one round within a session"
     session = models.ForeignKey(
         Session,
@@ -132,7 +115,8 @@ class Round(TimeStampable):
             self.number = self.session.round_set.count() + 1
         super().save(*args, **kwargs)
     
-
+    def __str__(self):
+        return f"Round {self.number} of {self.session.__str__()}"
     class Meta:
         verbose_name = _("Round")
         verbose_name_plural = _("Rounds")
@@ -210,6 +194,9 @@ class Play(TimeStampable):
                          "place", "film", "obj", "brand"]:
             word = self.__getattribute__(category)
             validate_starts(letter, word)
+    
+    def __str__(self):
+        return f"{self.user}'s play of {self.round.__str__()}"
     class Meta:
         verbose_name = _("Play")
         verbose_name_plural = _("Plays")
