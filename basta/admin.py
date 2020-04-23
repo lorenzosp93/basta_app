@@ -4,15 +4,38 @@ from .models import Session, Round, Play
 
 class AuditableAdmin(admin.ModelAdmin):
     exclude = ('created_by', 'modified_by', 'created_at', 'modified_at')
+    date_hierarchy = 'created_at'
     def save_model(self, request, obj, form, change):
         obj.save(user=request.user)
+class RoundTabular(admin.TabularInline):
+    model = Round
+    extra = 5
         
 @admin.register(Session)
 class SessionAdmin(AuditableAdmin):
-    pass
+    inlines = [RoundTabular]
+    list_display = ('name', 'active')
+
+class PlayTabular(admin.TabularInline):
+    model = Play
+    extra = 5
+
 @admin.register(Round)
 class RoundAdmin(AuditableAdmin):
-    pass
+    inlines = [PlayTabular]
+    list_display = (
+        '__str__',
+        'active',
+        'created_by',
+        'created_at'
+    )
+
 @admin.register(Play)
 class PlayAdmin(admin.ModelAdmin):
-    pass
+    list_display = (
+        '__str__',
+        'user',
+        'score',
+        'created_at',
+        'modified_at'
+    )

@@ -1,5 +1,6 @@
 "Module to define the base basta app models"
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import User
 from django.utils.text import slugify
 
@@ -42,9 +43,10 @@ class Named(models.Model):
         super().save(*args, **kwargs)
         
     def slug_name(self):
-        if not self.name:
-            self.name =  _("Game on %(date)s" % {"date": now()})
-        self.slug = slugify(self.name)
+        self.slug = slugify(self.get_name())
+    
+    def get_name(self):
+        return self.name
 
 class Auditable(TimeStampable):
     class Meta:
@@ -53,21 +55,29 @@ class Auditable(TimeStampable):
     created_by = models.ForeignKey(
         User,
         related_name='+',
-        on_delete=models.DO_NOTHING,
+        on_delete=models.SET_NULL,
+        null=True,
     )
     modified_by = models.ForeignKey(
         User,
         related_name='+',
-        on_delete=models.DO_NOTHING,
+        on_delete=models.SET_NULL,
+        null=True,
     )
 
-    def save(self, **kwargs):
-        if (user := **kwargs.pop('user', None)):
-            self.audit_fields_set(user)
-        return super().save(**kwargs)
+    def save(self, *args, **kwargs):
+        try:
+            user = self.user
+        except:
+            user = kwargs.pop('user', None)
+        finally:
+            if user:
+                self.audit_fields_set(user)
+
+        return super().save(*args, **kwargs)
 
     def audit_fields_set(self, user):
         if isinstance(user, User):
             if not self.created_by:
-                self.created_by = self.user
-            self.modified_by = self.user
+                self.created_by = user
+            self.modified_by = user

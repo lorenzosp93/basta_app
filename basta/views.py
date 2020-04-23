@@ -34,17 +34,16 @@ class PlayView(AjaxableResponseMixin, UpdateView):
         if form.instance.round.active:
             if form.is_valid():
                 if request.POST.get("Stop"):
-                    return self.upon_valid_stop(form)
+                    return self.upon_valid_stop(form, request.user)
                 return self.form_valid(form)
             else:
                 return self.form_invalid(form)
         else:
             return self.finish_round(form)
     
-    def upon_valid_stop(self, form):
+    def upon_valid_stop(self, form, user):
         "Trigger for when player hits the Stop button"
-        round_ = form.instance.round
-        object_deactivate(round_)
+        object_deactivate(form.instance.round, user)
         return self.finish_round(form)
 
     def finish_round(self, form):
@@ -191,8 +190,8 @@ def session_create(request):
 @login_required
 def session_close(request, slug):
     session = Session.objects.get(slug=slug)
-    object_deactivate(session)
+    object_deactivate(session, request.user)
     for round_ in session.round_set.all():
-        object_deactivate(round_, user=request.user)
+        object_deactivate(round_, request.user)
     return redirect(reverse("basta:home"))
 
