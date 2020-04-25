@@ -16,13 +16,13 @@ class Session(Auditable, Named):
     class Meta:
         verbose_name = _("Session")
         verbose_name_plural = _("Sessions")
+        ordering = ['-created_at']
 
     active = models.BooleanField(
         verbose_name=_("Is session active?"),
         default = True,
     )
     
-
     def get_absolute_url(self):
         return reverse("basta:session", kwargs={"slug": self.slug})
 
@@ -44,20 +44,26 @@ class Session(Auditable, Named):
                     participant_scores[key] = val
                 else:
                     participant_scores[key] += val
-        return participant_scores
+        return [
+            {'participant': participant, 'score': score} 
+            for participant, score in participant_scores.items()
+        ]
     
     @property
     def get_winner_score(self):
-        scores = self.get_scores
-        if scores:
-            winner = max(scores.keys(), key=(lambda key: scores[key]))
-            return {winner: scores[winner]}
+        score_list = self.get_scores
+        if score_list:
+            winner = max(
+                range(len(score_list)),
+                key=lambda index: score_list[index]['score']
+            )
+            return {score_list[winner]['participant']: score_list[winner]['score']}
         else:
             return {}
     
     def get_name(self):
         if not self.name:
-            return  _("Game on %(date)s" % {"date": now()})
+            self.name =  _("Game on %(date)s" % {"date": now()})
         return self.name
 
 class Round(Auditable):
@@ -126,6 +132,7 @@ class Round(Auditable):
         verbose_name = _("Round")
         verbose_name_plural = _("Rounds")
         unique_together = ("letter", "session",)
+        ordering = ['number']
 
 class Play(TimeStampable):
     "Model to define one play for one user"
@@ -206,3 +213,4 @@ class Play(TimeStampable):
         verbose_name = _("Play")
         verbose_name_plural = _("Plays")
         unique_together = ['round', 'user']
+        ordering = ['score']

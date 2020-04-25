@@ -15,9 +15,32 @@
     {% trans "Start new round" %}
   </a>
   {% endif %}
-  <a role="button" class="btn btn-primary my-3" href="{% url 'basta:sessionclose' session.slug %}">
+  <a role="button" class="btn btn-danger my-3 text-white" data-toggle="modal" data-target="#closesession-modal">
     {% trans "Close this session" %}
   </a>
+  <!-- Modal -->
+  <div class="modal fade" id="closesession-modal" tabindex="-1" role="dialog" aria-labelledby="modallabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modallabel">{%trans "Close this session"%}</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          {%trans "Are you sure you want to close this session? Participants will not be able to continue playing on this session."%}
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">{%trans "Cancel"%}</button>
+          <a class="btn btn-danger"  href="{% url 'basta:sessionclose' session.slug %}">
+            {%trans "Close session"%}
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
   {% endif %}
 </div>
 
@@ -46,8 +69,7 @@
         </ul>
       </td>
       <td>
-        <a id="join-button" role="button" class="btn btn-primary"
-          href="{{ round.get_absolute_url }}">
+        <a id="join-button" role="button" class="btn btn-primary" href="{{ round.get_absolute_url }}">
           {% trans "Join" %}
         </a>
       </td>
@@ -113,11 +135,11 @@
     </tr>
   </thead>
   <tbody>
-    {% for participant, score in session.get_scores.items %}
+    {% for get_scores in session.get_scores|dictsort:"score" %}
     {% if not round.active %}
     <tr>
-      <th scope="row">{{ participant }}</th>
-      <td>{{ score }}</td>
+      <th scope="row">{{ get_scores.participant }}</th>
+      <td>{{ get_scores.score }}</td>
     </tr>
     {% endif %}
     {% empty %}
@@ -132,8 +154,8 @@
 
   function ajax_poll_refresh() {
     if ($("#join-button").length) {
-        window.clearInterval;
-      } else {
+      window.clearInterval;
+    } else {
       $.ajax({
         type: "GET",
         url: window.location.href + 'poll-refresh/',
