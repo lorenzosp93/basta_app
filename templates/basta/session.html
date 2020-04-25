@@ -135,7 +135,7 @@
     </tr>
   </thead>
   <tbody>
-    {% for get_scores in session.get_scores|dictsort:"score" %}
+    {% for get_scores in session.get_scores|dictsortreversed:"score" %}
     {% if not round.active %}
     <tr>
       <th scope="row">{{ get_scores.participant }}</th>
