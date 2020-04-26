@@ -30,57 +30,59 @@
 {% if not round.active %}
 <form method="POST" action="{%url "basta:playscore" slug=round.session.slug number=round.number %}">
   {% csrf_token %}
-  <table class="table">
-    <thead>
-      <tr>
-        <th scope="col">{% trans "User" %}</th>
-        <th scope="col">{% trans "Name" %}</th>
-        <th scope="col">{% trans "Surname" %}</th>
-        <th scope="col">{% trans "Flower / Fruit / Vegetable" %}</th>
-        <th scope="col">{% trans "Animal" %}</th>
-        <th scope="col">{% trans "City / Country" %}</th>
-        <th scope="col">{% trans "Movie / Series" %}</th>
-        <th scope="col">{% trans "Object" %}</th>
-        <th scope="col">{% trans "Brand" %}</th>
-        <th scope="col">{% trans "Total" %}</th>
+  <div class="table-responsive">
+    <table class="table table-sm">
+      <thead>
+        <tr>
+          <th scope="col">{% trans "User" %}</th>
+          <th scope="col">{% trans "Name" %}</th>
+          <th scope="col">{% trans "Surname" %}</th>
+          <th scope="col">{% trans "Flower / Fruit / Vegetable" %}</th>
+          <th scope="col">{% trans "Animal" %}</th>
+          <th scope="col">{% trans "City / Country" %}</th>
+          <th scope="col">{% trans "Movie / Series" %}</th>
+          <th scope="col">{% trans "Object" %}</th>
+          <th scope="col">{% trans "Brand" %}</th>
+          <th scope="col">{% trans "Total" %}</th>
 
-      </tr>
-    </thead>
-    <tbody>
-      {% for play in round.play_set.all %}
-      <tr>
-        <th scope="row">{{ play.user }}</th>
-        <td scope="row">{{ play.name }}</td>
-        <td scope="row">{{ play.surname }}</td>
-        <td scope="row">{{ play.plant }}</td>
-        <td scope="row">{{ play.animal }}</td>
-        <td scope="row">{{ play.place }}</td>
-        <td scope="row">{{ play.film }}</td>
-        <td scope="row">{{ play.obj }}</td>
-        <td scope="row">{{ play.brand }}</td>
-        <td scope="row">{% if play.score %}{{ play.score }}{% endif %}</td>
-      </tr>
-      {% empty %}
-      <p>
-        {% trans "No plays available yet" %}
-      </p>
-      {% endfor %}
-      {% if my_play.score == 0 %}
-      <tr>
-        <th scope="row">{%trans "My score"%}</th>
-        <td scope="row"><input type="number" class="s form-control" value="0"></td>
-        <td scope="row"><input type="number" class="s form-control" value="0"></td>
-        <td scope="row"><input type="number" class="s form-control" value="0"></td>
-        <td scope="row"><input type="number" class="s form-control" value="0"></td>
-        <td scope="row"><input type="number" class="s form-control" value="0"></td>
-        <td scope="row"><input type="number" class="s form-control" value="0"></td>
-        <td scope="row"><input type="number" class="s form-control" value="0"></td>
-        <td scope="row"><input type="number" class="s form-control" value="0"></td>
-        <td scope="row"><input name="score" type="number" class="t form-control" readonly value="0"></td>
-      </tr>
-      {% endif %}
-    </tbody>
-  </table>
+        </tr>
+      </thead>
+      <tbody>
+        {% for play in round.play_set.all %}
+        <tr {% if user == play.user %} class="table-active" {% endif %}>
+          <th scope="row">{{ play.user }}</th>
+          <td scope="row">{{ play.name }}</td>
+          <td scope="row">{{ play.surname }}</td>
+          <td scope="row">{{ play.plant }}</td>
+          <td scope="row">{{ play.animal }}</td>
+          <td scope="row">{{ play.place }}</td>
+          <td scope="row">{{ play.film }}</td>
+          <td scope="row">{{ play.obj }}</td>
+          <td scope="row">{{ play.brand }}</td>
+          <td scope="row">{% if play.score %}{{ play.score }}{% endif %}</td>
+        </tr>
+        {% empty %}
+        <p>
+          {% trans "No plays available yet" %}
+        </p>
+        {% endfor %}
+        {% if my_play.score == 0 %}
+        <tr>
+          <th scope="row">{%trans "My score"%}</th>
+          <td scope="row"><input type="number" class="s form-control" value="0"></td>
+          <td scope="row"><input type="number" class="s form-control" value="0"></td>
+          <td scope="row"><input type="number" class="s form-control" value="0"></td>
+          <td scope="row"><input type="number" class="s form-control" value="0"></td>
+          <td scope="row"><input type="number" class="s form-control" value="0"></td>
+          <td scope="row"><input type="number" class="s form-control" value="0"></td>
+          <td scope="row"><input type="number" class="s form-control" value="0"></td>
+          <td scope="row"><input type="number" class="s form-control" value="0"></td>
+          <td scope="row"><input name="score" type="number" class="t form-control" readonly value="0"></td>
+        </tr>
+        {% endif %}
+      </tbody>
+    </table>
+  </div>
   {% if my_play.score == 0 %}
 
   <div class="row justify-content-start">

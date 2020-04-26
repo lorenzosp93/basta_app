@@ -6,7 +6,7 @@
 <h3> {% trans "Welcome to Basta online" %} </h3>
 
 <div class="jumbotron">
-  <h5> {%trans "Create new game session:"%} </h5>
+  <h5> {%trans "Create a new game session:"%} </h5>
   <form method="POST" action="{% url 'basta:sessioncreate' %}">
     {% csrf_token %}
     <div class="form-group">
@@ -16,13 +16,16 @@
         {%trans "Insert a name for the new session, cannot be duplicate"%}
       </small>
     </div>
-    <button type="submit" class="btn btn-primary">{%trans "Start"%}</button>
+    <button type="submit" class="btn btn-success">{%trans "Create"%}</button>
+    <a role="button" href='#active_sessions' class="btn btn-primary">{%trans "Join existing"%}</a>
+
   </form>
 </div>
 
 <h5> {% trans "Active sessions:"%} </h5>
 
-<table class="table">
+<div class="table-responsive">
+<table id='active_sessions' class="table">
   <thead>
     <tr>
       <th scope="col">#</th>
@@ -65,9 +68,11 @@
     {% endfor %}
   </tbody>
 </table>
+</div>
 
 <h5> {%trans "Closed sessions:"%} </h5>
 
+<div class="table-responsive">
 <table class="table">
   <thead>
     <tr>
@@ -115,6 +120,8 @@
     {% endfor %}
   </tbody>
 </table>
+</div>
+
 <div class="row d-flex justify-content-center">
   <ul class="pagination">
     {% if page_obj.has_previous %}
