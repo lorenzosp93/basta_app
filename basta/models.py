@@ -274,3 +274,6 @@ class PlayCategory(TimeStampable):
     
     def __str__(self):
         return "PlayCategory " + self.category.name + " of " + str(self.play)
+    
+    class Meta:
+        ordering = ['play', 'category']
