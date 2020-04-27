@@ -6,6 +6,7 @@
 <h3> {% trans "Welcome to Basta online" %} </h3>
 
 <div class="jumbotron">
+{% if user.is_authenticated %}
   <h5> {%trans "Create a new game session:"%} </h5>
   <form method="POST" action="{% url 'basta:sessioncreate' %}">
     {% csrf_token %}
@@ -40,6 +41,9 @@
     <a role="button" href='#active_sessions' class="btn btn-primary">{%trans "Join existing"%}</a>
 
   </form>
+  {% else %}
+    <h5>{%trans "Please log in to create a new game session or join an existing one."%}</h5>
+  {% endif %}
 </div>
 
 <h5> {% trans "Active sessions:"%} </h5>
