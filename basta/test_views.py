@@ -4,28 +4,37 @@ from django.urls import reverse
 from django.http import JsonResponse
 from unittest import mock
 from copy import copy
-from .models import Play, Round, Session
+from .models import Play, Round, Session, PlayCategory, Category
 from .views import (
     PlayView, RoundView, SessionView,
     play_create, play_score,
     round_create,
     session_close, session_create,
 )
-from .forms import PlayForm
+from .forms import PlayCategoryFormSet, PlayForm
 
 class TestFBViews(TestCase):
     def setUp(self):
         self.factory = RequestFactory()
         self.user = User.objects.create_user(username="testuser1")
+        self.category = Category.objects.get(
+            name='name',
+            default=True
+        )
         self.session = Session.objects.create(
             name='test 0',
         )
+        self.session.categories.set([self.category])
         self.round = Round.objects.create(
             session=self.session,
         )
         self.play = Play.objects.create(
             round=self.round,
             user=self.user,
+        )
+        self.playcategory = PlayCategory(
+            play=self.play,
+            category=self.category,
         )
 
     def test_session_create(self):
@@ -189,6 +198,9 @@ class TestCBViews(TestCase):
     def setUp(self):
         self.factory = RequestFactory()
         self.user = User.objects.create_user(username="testuser1")
+        self.category = Category.objects.get(
+            name='name'
+        )
         self.session = Session.objects.create(
             name='test 0',
         )
@@ -198,6 +210,10 @@ class TestCBViews(TestCase):
         self.play = Play.objects.create(
             round=self.round,
             user=self.user,
+        )
+        self.playcategory = PlayCategory.objects.create(
+            play=self.play,
+            category=self.category,
         )
 
     @staticmethod
@@ -294,8 +310,13 @@ class TestCBViews(TestCase):
     def set_up_formdata(self):
         l = self.round.letter
         return {
-            "name": l + "name",
-            "brand": l + "brand"
+            "categories-0-id": self.playcategory.id,
+            "categories-0-play": self.play.id,
+            "categories-0-value": l + "name",
+            "categories-TOTAL_FORMS": 1,
+            "categories-INITIAL_FORMS": 1,
+            "categories-MIN_NUM_FORMS": 0,
+            "categories-MAX_NUM_FORMS": 1000,
         }
     
     def set_up_form(self, data=None, play=None):
@@ -309,7 +330,9 @@ class TestCBViews(TestCase):
     def test_play_get_success_url(self):
         view, _ = self.set_up_play_view()
         form = self.set_up_form()
-        url = view.get_success_url(form)
+        view.object = self.play
+        view.request.POST = self.set_up_formdata()
+        url = view.get_success_url()
         self.assertURLEqual(
             url,
             reverse(
@@ -324,6 +347,8 @@ class TestCBViews(TestCase):
     def test_play_finish_round(self):
         view, request = self.set_up_play_view()
         form = self.set_up_form()
+        view.object = self.play   
+        view.request.POST = self.set_up_formdata()     
         response = view.finish_round(form)
         self.assertEqual(response.status_code, 302)
         self.assertURLEqual(
@@ -345,6 +370,8 @@ class TestCBViews(TestCase):
         )
         view, _ = self.set_up_play_view(request)
         form = self.set_up_form()
+        view.object = self.play
+        view.request.POST = self.set_up_formdata()
         response = view.finish_round(form)
         self.assertEqual(response.status_code, 200)
         self.assertIsInstance(
@@ -355,6 +382,8 @@ class TestCBViews(TestCase):
     def test_play_upon_valid_stop(self):
         view, _ = self.set_up_play_view()
         form = self.set_up_form()
+        view.object = self.play
+        view.request.POST = self.set_up_formdata()
         response = view.upon_valid_stop(form, self.user)
         self.assertURLEqual(
             response.url,
@@ -367,26 +396,21 @@ class TestCBViews(TestCase):
         )
 
     def test_form_logic(self):
-        view, request = self.set_up_play_view()
-        request.POST = {"Stop": True}
+        view, _ = self.set_up_play_view()
+        view.request.POST = self.set_up_formdata()
+        view.request.POST.update({"Stop": True})
         form = self.set_up_form()
-        response = view.form_logic(request, form)
+        view.object = self.play
+        response = view.form_logic(form)
         self.assertEqual(response.status_code, 302)
-    
-    def test_form_logic_stop(self):
-        view, request = self.set_up_play_view()
-        form = self.set_up_form()
-        response = view.form_logic(request, form)
-        self.assertURLEqual(
-            response.url,
-            view.upon_valid_stop(form, self.user).url,
-        )
 
     def test_form_logic_inactive(self):
-        view, request = self.set_up_play_view()
+        view, _ = self.set_up_play_view()
         form = self.set_up_form()
         form.instance.round.active = False
-        response = view.form_logic(request, form)
+        view.request.POST = self.set_up_formdata()
+        view.object = self.play
+        response = view.form_logic(form)
         self.assertURLEqual(
             response.url,
             view.get_success_url(form),

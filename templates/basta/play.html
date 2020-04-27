@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load i18n %}
 {% block title %}
-{% trans "Round:" %} {{ form.instance.round.letter|upper }}
+{% trans "Round:" %} {{ play.round.letter|upper }}
 {% endblock %}
 
 {% block navlist %}
@@ -16,10 +16,11 @@
 {% block content %}
 <div class="container">
     <h1 class="jumbotron text-center m-3">
-        {% trans "Letter: "%} {{ form.instance.round.letter|upper }}
+        {% trans "Letter: "%} {{ play.round.letter|upper }}
     </h1>
 
     <form method="post">
+        {{ formset.management_form }}
         {% if error %}
         <div class="alert-danger" role="alert">
             {{ error }}
@@ -28,12 +29,17 @@
         {% endif %}
 
         {% csrf_token %}
+        {% for form in formset %}
+        {% for field in form.hidden_fields %}
+        {{ field }}
+        {% endfor %}
         {% for field in form.visible_fields %}
         <div class="form-group row p-0">
             <label class="col-sm-4 col-lg-2 col-form-label">
-                {% trans field.label_tag %}
+                {% trans form.instance.label %}
             </label>
             <div class="col-sm-8 col-lg-10">
+                
                 {{ field }}
                 {% if field.help_text %}
                 <small class="form-text text-muted help">
@@ -45,6 +51,7 @@
                 {% endif %}
             </div>
         </div>
+        {% endfor %}
         {% endfor %}
 
 

@@ -32,6 +32,7 @@ class Named(models.Model):
     slug = models.SlugField(
         max_length=50,
         unique=True,
+        blank=True,
     )
 
     def __str__(self):

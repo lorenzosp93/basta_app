@@ -5,11 +5,56 @@ from django.utils.translation import gettext_lazy as _
 from django.shortcuts import reverse
 from django.utils.timezone import now
 from random import choice
+import random
 import string
 from .base.utils import validate_starts
 from .base.models import Auditable, TimeStampable, Named
 
 # Create your models here.
+
+CATEGORIES = (
+    ('name', _("Name")),
+    ('surname', _("Surname")),
+    ('plant', _("Flower / Fruit / Vegetable")),
+    ('animal', _("Animal")),
+    ('location', _("City / Country")),
+    ('film', _("Movie / Series")),
+    ('object', _("Object")),
+    ('brand', _("Brand")),
+    ('band', _("Musician / Band")),
+    ('color', _("Color")),
+    ('profession', _("Profession")),
+    ('sport', _("Sport")),
+    ('historical', _("Historical figure")),
+    ('art', _("Monument / Art piece")),
+    ('gifts', _("Gift / Present")),
+    ('bad_habits', _("Bad habit")),
+    ('reasons911', _("Reason to call 911")),
+    ('food', _("Food")),
+    ('athletes', _("Athlete")),
+    ('fictional', _("Fictional character")),
+    ('instruments', _("Instrument / Tool")),
+    ('halloween', _("Halloween costume")),
+    ('bodyparts', _("Body part")),
+)
+DEFAULTS = [
+    'name', 'surname','plant', 'animal',
+    'location', 'film', 'object', 'brand'
+]
+
+class Category(models.Model):
+    name = models.CharField(
+        verbose_name=_("Category name"),
+        choices=CATEGORIES,
+        unique=True,
+        max_length=15,
+    )
+    default = models.BooleanField(
+        verbose_name="Is default category?",
+        default=False,
+    )
+    def __str__(self):
+        return "<Category " + self.name +">"
 
 class Session(Auditable, Named):
     "Model to define a play session, participants and rules"
@@ -21,6 +66,16 @@ class Session(Auditable, Named):
     active = models.BooleanField(
         verbose_name=_("Is session active?"),
         default = True,
+    )
+
+    categories = models.ManyToManyField(
+        Category,
+        related_name="+",
+    )
+
+    random_categories = models.BooleanField(
+        verbose_name=_("Random categories"),
+        default=False,
     )
     
     def get_absolute_url(self):
@@ -65,6 +120,11 @@ class Session(Auditable, Named):
         if not self.name:
             self.name =  _("Game on %(date)s" % {"date": now()})
         return self.name
+
+    def save(self, *args, **kwargs):
+        return super().save(*args, **kwargs)
+        if not self.categories:
+            self.categories.set(Category.objects.filter(default=True))
 
 class Round(Auditable):
     "Model to defind one round within a session"
@@ -147,65 +207,31 @@ class Play(TimeStampable):
         related_name="play_set"
     )
 
-    name = models.CharField(
-        verbose_name=_("Name"),
-        max_length=15,
-        blank=True,
-    )
-    surname = models.CharField(
-        verbose_name=_("Surname"),
-        max_length=15,
-        blank=True,
-    )
-    plant = models.CharField(
-        verbose_name=_("Flower / Fruit / Vegetable"),
-        max_length=15,
-        blank=True,
-    )
-    animal = models.CharField(
-        verbose_name=_("Animal"),
-        max_length=15,
-        blank=True,
-    )
-    place = models.CharField(
-        verbose_name=_("City / Country"),
-        max_length=15,
-        blank=True,
-    )
-    film = models.TextField(
-        max_length=40,
-        verbose_name=_("Movie / Series"),
-        blank=True,
-    )
-    obj = models.CharField(
-        verbose_name=_("Object"),
-        max_length=15,
-        blank=True,
-    )
-    brand = models.TextField(
-        verbose_name=_("Brand"),
-        max_length=25,
-        blank=True,
-    )
-
     score = models.PositiveIntegerField(editable=False, default=0)
+
+    def get_categories(self):
+        if self.round.session.random_categories:
+            return random.sample(list(Category.objects.all()) ,k=len(DEFAULTS))
+        else:
+            return self.round.session.categories.all()
+    
+    def create_playcategories(self):
+        for category in self.get_categories():
+            PlayCategory.objects.create(
+                category=category,
+                play=self,
+            )
+
+    def save(self, **kwargs):
+        super().save(**kwargs)
+        if not self.categories.all():
+            self.create_playcategories()
 
     def get_absolute_url(self):
         return reverse("basta:play", kwargs={
             "slug": self.round.session.slug,
             "number": self.round.number,
         })
-
-    def clean(self):
-        "Define validations on word values"
-        self.play_validate_starts()
-
-    def play_validate_starts(self):
-        letter = self.round.letter
-        for category in ["name", "surname", "plant", "animal",
-                         "place", "film", "obj", "brand"]:
-            word = self.__getattribute__(category)
-            validate_starts(letter, word)
     
     def __str__(self):
         return f"{self.user}'s play of {self.round.__str__()}"
@@ -214,3 +240,37 @@ class Play(TimeStampable):
         verbose_name_plural = _("Plays")
         unique_together = ['round', 'user']
         ordering = ['score']
+
+class PlayCategory(TimeStampable):
+    "Model to define the fields in each play"
+    category = models.ForeignKey(
+        Category,
+        on_delete=models.DO_NOTHING,
+        related_name="+"
+    )
+    play = models.ForeignKey(
+        Play,
+        on_delete=models.CASCADE,
+        related_name="categories",
+    )
+    value = models.CharField(
+        max_length = 50,
+        blank=True,
+    )
+
+    @property
+    def label(self):
+        return self.category.get_name_display()
+
+    def clean(self):
+        "Define validations on word values"
+        self.play_validate_starts()
+        super().clean()
+
+    def play_validate_starts(self):
+        letter = self.play.round.letter
+        if self.value:
+            validate_starts(letter, self.value)
+    
+    def __str__(self):
+        return "PlayCategory " + self.category.name + " of " + str(self.play)

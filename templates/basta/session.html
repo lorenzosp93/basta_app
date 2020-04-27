@@ -8,6 +8,20 @@
 {% block content %}
 <div class="jumbotron">
   <h3> {{session.name}}</h3>
+  <p>
+  {%trans "Categories: "%} 
+  {% if session.random_categories %}
+  {%trans "randomly generated at every turn!"%}
+  {% else %}
+  <ul>
+  {% for category in session.categories.all %}
+  <li>
+  {% trans category.get_name_display %}
+  </li>
+  {% endfor %}
+  </ul>
+  {% endif %}
+  </p>
 
   {% if session.active %}
   {% if not active_round %}
@@ -42,6 +56,7 @@
     </div>
   </div>
   {% endif %}
+  
 </div>
 
 <h5> {% trans "Active round:"%} </h5>

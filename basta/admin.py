@@ -1,7 +1,6 @@
 from django.contrib import admin
-from .models import Session, Round, Play 
+from .models import Session, Round, Play, PlayCategory
 # Register your models here.
-
 class AuditableAdmin(admin.ModelAdmin):
     exclude = ('created_by', 'modified_by', 'created_at', 'modified_at')
     date_hierarchy = 'created_at'
@@ -9,7 +8,9 @@ class AuditableAdmin(admin.ModelAdmin):
         obj.save(user=request.user)
 class RoundTabular(admin.TabularInline):
     model = Round
-    extra = 5
+    extra = 1
+
+
         
 @admin.register(Session)
 class SessionAdmin(AuditableAdmin):
@@ -30,6 +31,9 @@ class RoundAdmin(AuditableAdmin):
         'created_at'
     )
 
+class PlayCategoryTabular(admin.TabularInline):
+    model = PlayCategory
+    extra = 0
 @admin.register(Play)
 class PlayAdmin(admin.ModelAdmin):
     list_display = (
@@ -39,3 +43,4 @@ class PlayAdmin(admin.ModelAdmin):
         'created_at',
         'modified_at'
     )
+    inlines = [PlayCategoryTabular]

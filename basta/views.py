@@ -7,8 +7,8 @@ from django.contrib.auth.decorators import login_required
 from random import randint
 import json
 from .base.views import AjaxableResponseMixin
-from .forms import PlayForm
-from .models import Round, Session, Play
+from .forms import PlayCategoryFormSet, PlayForm
+from .models import Round, Session, Play, Category, PlayCategory
 
 # Create your views here.
 
@@ -16,40 +16,47 @@ class PlayView(AjaxableResponseMixin, UpdateView):
     template_name = "basta/play.html"
     form_class = PlayForm
 
-    def get_object(self):
-        session = Session.objects.get(slug=self.kwargs.get('slug'))
-        round_ = Round.objects.get(session=session, number=self.kwargs.get('number'))
-        return round_.play_set.get(user=self.request.user)
-    
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)
-
+        
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         form = self.get_form()
-        return self.form_logic(request, form)
+        return self.form_logic(form)
 
-    def form_logic(self, request, form):
+    def form_logic(self, form):
         "Defines the logic of what to do when a POST request is received"
         if form.instance.round.active:
-            if form.is_valid():
-                if request.POST.get("Stop"):
-                    return self.upon_valid_stop(form, request.user)
-                return self.form_valid(form)
-            else:
-                return self.form_invalid(form)
+            return self.form_active(form)
         else:
             return self.finish_round(form)
     
+    def form_active(self, form):
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
+    
+    def form_valid(self, form):
+        if self.request.POST.get("Stop"):
+            return self.upon_valid_stop(form, self.request.user)
+        return super().form_valid(form)
+
     def upon_valid_stop(self, form, user):
         "Trigger for when player hits the Stop button"
         object_deactivate(form.instance.round, user)
         return self.finish_round(form)
 
     def finish_round(self, form):
+        self.formset_validate()
         if self.request.is_ajax():
             return JsonResponse({"stop":True}, status=200)
         return redirect(self.get_success_url(form))
+
+    def get_object(self):
+        session = Session.objects.get(slug=self.kwargs.get('slug'))
+        round_ = Round.objects.get(session=session, number=self.kwargs.get('number'))
+        return round_.play_set.get(user=self.request.user)
 
     def get_success_url(self, form=None):
         if not form:
@@ -59,6 +66,24 @@ class PlayView(AjaxableResponseMixin, UpdateView):
             "slug":round_.session.slug,
             "number":round_.number,
         })
+    
+    def get_context_data(self, **kwargs):
+        if not kwargs.get('formset'):
+            kwargs['formset'] = self.get_formset()
+        return super().get_context_data(**kwargs)
+
+    def get_formset(self):
+        request = self.request
+        if request.method == "POST":
+            return self.formset_validate()
+        else:
+            return PlayCategoryFormSet(instance=self.object)
+    
+    def formset_validate(self):
+        formset = PlayCategoryFormSet(self.request.POST, instance=self.object)
+        if formset.is_valid():
+            formset.save()
+        return formset
 
 def object_deactivate(obj, user):
     obj.active = False
@@ -117,6 +142,12 @@ class SessionListView(ListView):
     context_object_name = "sessions"
     paginate_by = 5
     ordering = ['-created_at']
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["categories"] = Category.objects.all()
+        return context
+    
 
 def redirect_play(slug, number):
     return redirect(reverse("basta:play", kwargs={
@@ -179,13 +210,29 @@ def round_create(request, slug):
 
 @login_required
 def session_create(request):
-    name = request.POST.get('session_name', '')
+    name, random, categories = parse_post(request)
     new_session = Session.objects.create(
         name=name,
+        random_categories = random,
         created_by=request.user,
         modified_by=request.user,
     )
+    new_session.categories.set(categories)
     return redirect_session(new_session.slug)
+
+def parse_post(request):
+    name = request.POST.get('session_name', '')
+    random = request.POST.get('session_random', '')
+    if random == '':
+        random = False
+    else:
+        random = True
+    categories_list = request.POST.getlist('categories', '')
+    categories = [
+        Category.objects.get(name=category)
+        for category in categories_list
+    ]
+    return name, random, categories
 
 @login_required
 def session_close(request, slug):

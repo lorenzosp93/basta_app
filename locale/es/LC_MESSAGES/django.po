@@ -69,7 +69,7 @@ msgstr "Nombre"
 
 #: .\basta\models.py:156 .\templates\basta\round.html:39
 msgid "Surname"
-msgstr "Appellido"
+msgstr "Apellido"
 
 #: .\basta\models.py:161 .\templates\basta\round.html:40
 msgid "Flower / Fruit / Vegetable"
