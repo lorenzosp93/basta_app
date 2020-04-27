@@ -5,6 +5,7 @@ from django.core.validators import ValidationError
 from django.utils.crypto import get_random_string
 from unittest import mock
 from copy import copy
+import string
 from .models import (
     Play,
     Round,
@@ -232,3 +233,14 @@ class TestBastaModels(TestCase):
             list(categories),
 
         )
+
+    def test_end_session_on_final_round(self):
+        session = Session.objects.create()
+        for letter in string.ascii_lowercase:
+            Round.objects.create(
+                session=session,
+                letter=letter,
+                active=False,
+            )
+        self.assertFalse(session.active)
+        

@@ -2,30 +2,16 @@ from django.db import migrations, transaction, IntegrityError
 from django.utils.translation import gettext_lazy as _
 
 CATEGORIES = (
-    ('name', _("Name")),
-    ('surname', _("Surname")),
-    ('plant', _("Flower / Fruit / Vegetable")),
-    ('animal', _("Animal")),
-    ('location', _("City / Country")),
-    ('film', _("Movie / Series")),
-    ('object', _("Object")),
-    ('brand', _("Brand")),
-    ('band', _("Musician / Band")),
-    ('color', _("Color")),
-    ('profession', _("Profession")),
-    ('sport', _("Sport")),
-    ('historical', _("Historical figure")),
-    ('art', _("Monument / Art piece")),
-    ('gifts', _("Gift / Present")),
-    ('bad_habits', _("Bad habit")),
-    ('reasons911', _("Reason to call 911")),
-    ('food', _("Food")),
-    ('athletes', _("Athlete")),
-    ('fictional', _("Fictional character")),
-    ('instruments', _("Instrument / Tool")),
-    ('halloween', _("Halloween costume")),
-    ('bodyparts', _("Body part")),
+    ('suicide', _('Dumb ways to die')),
+    ('clothing', _('Cloting items')),
+    ('drinks', _('Drink')),
+    ('black', _('Thing that is black')),
+    ('rivers', _('River')),
+    ('boardgames', _('Board game')),
+    ('author', _('Author')),
+    ('song', _('Song')),
 )
+
 DEFAULTS = [
     'name', 'surname','plant', 'animal',
     'location', 'film', 'object', 'brand'
@@ -58,7 +44,7 @@ def uninitialize_categories(apps, schema_editor):
 
 class Migration(migrations.Migration):
     dependencies = [
-        ('basta', '0013_auto_20200426_1944')
+        ('basta', '0015_auto_20200427_1450')
     ]
     operations = [
         migrations.RunPython(

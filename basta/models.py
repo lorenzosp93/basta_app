@@ -34,7 +34,15 @@ CATEGORIES = (
     ('fictional', _("Fictional character")),
     ('instruments', _("Instrument / Tool")),
     ('halloween', _("Halloween costume")),
-    ('bodyparts', _("Body part")),
+    ('bodyparts', _("Body part")), # v1, migration 0014
+    ('suicide', _('Dumb ways to die')),
+    ('clothing', _('Cloting items')),
+    ('drinks', _('Drink')),
+    ('black', _('Thing that is black')),
+    ('rivers', _('River')),
+    ('boardgames', _('Board game')),
+    ('author', _('Author')),
+    ('song', _('Song')),
 )
 DEFAULTS = [
     'name', 'surname','plant', 'animal',
@@ -181,10 +189,22 @@ class Round(Auditable):
         "Override save function to calculate the round number"
         if not self.letter:
             self.letter = self.get_letter()
-        if self.pk == None:
-            self.number = self.session.round_set.count() + 1
+        if self.number == None:
+            self.set_number()
         super().save(*args, **kwargs)
+        if not self.active:
+            self.end_session_on_final_round()
     
+    def set_number(self):
+        self.number = self.session.round_set.count() + 1
+
+    def end_session_on_final_round(self):
+        try:
+            self.get_letter()
+        except:
+            self.session.active = False
+            self.session.save()
+
     def __str__(self):
         return f"Round {self.number} of {self.session.__str__()}"
     class Meta:
