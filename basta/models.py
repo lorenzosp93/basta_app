@@ -35,7 +35,7 @@ CATEGORIES = (
     ('instruments', _("Instrument / Tool")),
     ('halloween', _("Halloween costume")),
     ('bodyparts', _("Body part")), # v1, migration 0014
-    ('suicide', _('Dumb ways to kill yourself')),
+    ('suicide', _('Dumb ways to die')),
     ('clothing', _('Cloting items')),
     ('drinks', _('Drink')),
     ('black', _('Thing that is black')),
