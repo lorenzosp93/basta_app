@@ -20,6 +20,7 @@ class TestBastaModels(TestCase):
         self.user = User.objects.create_user(username="testuser1")
         self.category = Category.objects.get(
             name="name",
+            default=True,
         )
         self.session = Session.objects.create(
             name='test session',
@@ -32,10 +33,7 @@ class TestBastaModels(TestCase):
             round=self.round,
             user=self.user,
         )
-        self.playcategory = PlayCategory.objects.create(
-            play=self.play,
-            category=self.category,
-        )
+        
 
     def test_auditable(self):
         session = Session.objects.create(
@@ -89,7 +87,11 @@ class TestBastaModels(TestCase):
             round=round_,
             user=user2,
         )
-        play1.categories.set([copy(self.playcategory)])
+        playcat = PlayCategory.objects.create(
+            play=self.play,
+            category=self.category,
+        )
+        play1.categories.set([playcat])
         playcategory2 = PlayCategory.objects.create(
             play=play2,
             category=self.category
@@ -188,3 +190,45 @@ class TestBastaModels(TestCase):
             {play2.user.username: 5}
         )
     
+    def test_session_default_categories(self):
+        session = Session.objects.create(
+            name='test 2',
+        )
+        self.assertSetEqual(
+            session.categories.all(),
+            Category.objects.filter(default=True)
+        )
+
+    def test_play_get_categories(self):
+        session = Session.objects.create(
+            name='test 2',
+            random_categories=True,
+        )
+        round_ = Round.objects.create(session=session,)
+        play = Play.objects.create(
+            round=round_,
+            user=self.user,
+        )
+        self.assertSetEqual(
+            self.play.get_categories(),
+            self.session.categories.all()
+        )
+        self.assertNotEqual(
+            play.get_categories(),
+            session.categories.all()
+        )
+    
+    def test_create_playcategories(self):
+        session = Session.objects.create(name='test 2')
+        round_ = Round.objects.create(session=session,)
+        play = Play.objects.create(
+            round=round_,
+            user=self.user,
+        )
+        categories = session.categories.values_list('name', flat=True)
+
+        self.assertCountEqual(
+            [play.category.name for play in play.categories.all()],
+            list(categories),
+
+        )
