@@ -175,7 +175,7 @@ class Round(Auditable):
                             .values_list('letter', flat=True)
         letters = list(string.ascii_lowercase)
         avail_letters = [l for l in letters if l not in taken_letters]
-        return random.sample(avail_letters, k=1)
+        return random.choice(avail_letters)
 
     def save(self, *args, **kwargs):
         "Override save function to calculate the round number"
