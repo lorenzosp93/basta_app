@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, reverse
 from django.http import JsonResponse
 from django.views.generic import ListView, DetailView, UpdateView
 from django.utils.translation import gettext as _
+from django.utils.decorators import method_decorator
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from random import randint
@@ -12,6 +13,7 @@ from .models import Round, Session, Play, Category, PlayCategory
 
 # Create your views here.
 
+@method_decorator(login_required, name='dispatch')
 class PlayView(AjaxableResponseMixin, UpdateView):
     template_name = "basta/play.html"
     form_class = PlayForm
@@ -89,6 +91,7 @@ def object_deactivate(obj, user):
     obj.active = False
     return obj.save(user=user)
 
+@method_decorator(login_required, name='dispatch')
 class RoundView(AjaxableResponseMixin, DetailView):
     template_name = "basta/round.html"
     model = Round
@@ -114,6 +117,7 @@ class RoundView(AjaxableResponseMixin, DetailView):
         context = self.get_context_data(object=self.object, user=user)
         return self.render_to_response(context)
 
+@method_decorator(login_required, name='dispatch')
 class SessionView(DetailView):
     template_name = "basta/session.html"
     model = Session
