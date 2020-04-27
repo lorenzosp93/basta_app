@@ -42,7 +42,7 @@ CATEGORIES = (
     ('rivers', _('River')),
     ('boardgames', _('Board game')),
     ('author', _('Author')),
-    ('song', _('Song')),
+    ('song', _('Song')), #v2, migration 0016
 )
 DEFAULTS = [
     'name', 'surname','plant', 'animal',
