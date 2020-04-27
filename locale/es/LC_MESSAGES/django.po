@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-27 13:10+0200\n"
+"POT-Creation-Date: 2020-04-27 14:53+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -28,148 +28,180 @@ msgstr "Nombre de la sesión"
 msgid "%(word)s does not start with %(letter)s"
 msgstr "%(w)s no empieza con %(l)s"
 
-#: .\basta\models.py:15 .\templates\basta\start.html:56
-#: .\templates\basta\start.html:108
+#: .\basta\migrations\0014_initialize_categories.py:5 .\basta\models.py:15
+#: .\templates\basta\start.html:56 .\templates\basta\start.html:104
 msgid "Name"
 msgstr "Nombre"
 
-#: .\basta\models.py:16
+#: .\basta\migrations\0014_initialize_categories.py:6 .\basta\models.py:16
 msgid "Surname"
 msgstr "Apellido"
 
-#: .\basta\models.py:17
+#: .\basta\migrations\0014_initialize_categories.py:7 .\basta\models.py:17
 msgid "Flower / Fruit / Vegetable"
 msgstr "Flor / Fruta / Vegetal"
 
-#: .\basta\models.py:18
+#: .\basta\migrations\0014_initialize_categories.py:8 .\basta\models.py:18
 msgid "Animal"
 msgstr "Animal"
 
-#: .\basta\models.py:19
+#: .\basta\migrations\0014_initialize_categories.py:9 .\basta\models.py:19
 msgid "City / Country"
 msgstr "Ciudad / País"
 
-#: .\basta\models.py:20
+#: .\basta\migrations\0014_initialize_categories.py:10 .\basta\models.py:20
 msgid "Movie / Series"
 msgstr "Película / Serie"
 
-#: .\basta\models.py:21
+#: .\basta\migrations\0014_initialize_categories.py:11 .\basta\models.py:21
 msgid "Object"
 msgstr "Objeto"
 
-#: .\basta\models.py:22
+#: .\basta\migrations\0014_initialize_categories.py:12 .\basta\models.py:22
 msgid "Brand"
 msgstr "Marca"
 
-#: .\basta\models.py:23
+#: .\basta\migrations\0014_initialize_categories.py:13 .\basta\models.py:23
 msgid "Musician / Band"
 msgstr "Músico / Band"
 
-#: .\basta\models.py:24
+#: .\basta\migrations\0014_initialize_categories.py:14 .\basta\models.py:24
 msgid "Color"
 msgstr "Color"
 
-#: .\basta\models.py:25
+#: .\basta\migrations\0014_initialize_categories.py:15 .\basta\models.py:25
 #, fuzzy
 #| msgid "Session"
 msgid "Profession"
 msgstr "Profesión"
 
-#: .\basta\models.py:26
+#: .\basta\migrations\0014_initialize_categories.py:16 .\basta\models.py:26
 msgid "Sport"
 msgstr "Deporte"
 
-#: .\basta\models.py:27
+#: .\basta\migrations\0014_initialize_categories.py:17 .\basta\models.py:27
 msgid "Historical figure"
 msgstr "Figura histórica"
 
-#: .\basta\models.py:28
+#: .\basta\migrations\0014_initialize_categories.py:18 .\basta\models.py:28
 msgid "Monument / Art piece"
 msgstr "Monumento / Obra de arte"
 
-#: .\basta\models.py:29
+#: .\basta\migrations\0014_initialize_categories.py:19 .\basta\models.py:29
 msgid "Gift / Present"
 msgstr "Regalo"
 
-#: .\basta\models.py:30
+#: .\basta\migrations\0014_initialize_categories.py:20 .\basta\models.py:30
 msgid "Bad habit"
 msgstr "Mal hábito"
 
-#: .\basta\models.py:31
+#: .\basta\migrations\0014_initialize_categories.py:21 .\basta\models.py:31
 msgid "Reason to call 911"
 msgstr "Razón para llamar al 112"
 
-#: .\basta\models.py:32
+#: .\basta\migrations\0014_initialize_categories.py:22 .\basta\models.py:32
 msgid "Food"
 msgstr "Comida"
 
-#: .\basta\models.py:33
+#: .\basta\migrations\0014_initialize_categories.py:23 .\basta\models.py:33
 msgid "Athlete"
 msgstr "Atleta"
 
-#: .\basta\models.py:34
+#: .\basta\migrations\0014_initialize_categories.py:24 .\basta\models.py:34
 msgid "Fictional character"
 msgstr "Personaje de ficción"
 
-#: .\basta\models.py:35
+#: .\basta\migrations\0014_initialize_categories.py:25 .\basta\models.py:35
 msgid "Instrument / Tool"
 msgstr "Instrumento / herramienta"
 
-#: .\basta\models.py:36
+#: .\basta\migrations\0014_initialize_categories.py:26 .\basta\models.py:36
 msgid "Halloween costume"
 msgstr "Disfraz de Halloween"
 
-#: .\basta\models.py:37
+#: .\basta\migrations\0014_initialize_categories.py:27 .\basta\models.py:37
 msgid "Body part"
 msgstr "Parte del cuerpo"
 
-#: .\basta\models.py:46
+#: .\basta\migrations\0016_initialize_categories.py:5 .\basta\models.py:38
+msgid "Dumb ways to die"
+msgstr "Formas tontas de morir"
+
+#: .\basta\migrations\0016_initialize_categories.py:6 .\basta\models.py:39
+msgid "Cloting items"
+msgstr "Prenda de vestir"
+
+#: .\basta\migrations\0016_initialize_categories.py:7 .\basta\models.py:40
+msgid "Drink"
+msgstr "Bebidas"
+
+#: .\basta\migrations\0016_initialize_categories.py:8 .\basta\models.py:41
+msgid "Thing that is black"
+msgstr "Cosas de color negro"
+
+#: .\basta\migrations\0016_initialize_categories.py:9 .\basta\models.py:42
+msgid "River"
+msgstr "Río"
+
+#: .\basta\migrations\0016_initialize_categories.py:10 .\basta\models.py:43
+msgid "Board game"
+msgstr "Juego de mesa"
+
+#: .\basta\migrations\0016_initialize_categories.py:11 .\basta\models.py:44
+msgid "Author"
+msgstr "Autor"
+
+#: .\basta\migrations\0016_initialize_categories.py:12 .\basta\models.py:45
+msgid "Song"
+msgstr "Canción"
+
+#: .\basta\models.py:54
 msgid "Category name"
 msgstr "Nombre de la categoría"
 
-#: .\basta\models.py:61 .\basta\models.py:133 .\templates\basta\play.html:9
+#: .\basta\models.py:69 .\basta\models.py:141 .\templates\basta\play.html:9
 #: .\templates\basta\round.html:10 .\templates\basta\session.html:5
 msgid "Session"
 msgstr "Sesión"
 
-#: .\basta\models.py:62
+#: .\basta\models.py:70
 msgid "Sessions"
 msgstr "Sesiones"
 
-#: .\basta\models.py:66
+#: .\basta\models.py:74
 msgid "Is session active?"
 msgstr "¿Está activa esta sesión?"
 
-#: .\basta\models.py:76 .\templates\basta\start.html:34
+#: .\basta\models.py:84 .\templates\basta\start.html:34
 msgid "Random categories"
 msgstr "Categoría aleatoria"
 
-#: .\basta\models.py:120
+#: .\basta\models.py:128
 #, python-format
 msgid "Game on %(date)s"
 msgstr "Partida en %(date)s"
 
-#: .\basta\models.py:139 .\templates\basta\session.html:108
+#: .\basta\models.py:147 .\templates\basta\session.html:108
 msgid "Letter"
 msgstr "Letra"
 
-#: .\basta\models.py:144
+#: .\basta\models.py:152
 msgid "Is round active?"
 msgstr "¿Está activa esta ronda?"
 
-#: .\basta\models.py:191 .\templates\basta\play.html:12
+#: .\basta\models.py:211 .\templates\basta\play.html:12
 msgid "Round"
 msgstr "Ronda"
 
-#: .\basta\models.py:192
+#: .\basta\models.py:212
 msgid "Rounds"
 msgstr "Rondas"
 
-#: .\basta\models.py:239
+#: .\basta\models.py:259
 msgid "Play"
 msgstr "Juego"
 
-#: .\basta\models.py:240
+#: .\basta\models.py:260
 msgid "Plays"
 msgstr "Juegos"
 
@@ -295,12 +327,12 @@ msgid "Participants"
 msgstr "Participantes"
 
 #: .\templates\basta\session.html:83 .\templates\basta\session.html:123
-#: .\templates\basta\session.html:124 .\templates\basta\start.html:128
-#: .\templates\basta\start.html:129
+#: .\templates\basta\session.html:124 .\templates\basta\start.html:124
+#: .\templates\basta\start.html:125
 msgid "No participants"
 msgstr "No hay participantes"
 
-#: .\templates\basta\session.html:89 .\templates\basta\start.html:84
+#: .\templates\basta\session.html:89 .\templates\basta\start.html:83
 msgid "Join"
 msgstr "Unirse"
 
@@ -314,7 +346,7 @@ msgstr "No hay rondas disponibles"
 msgid "Closed rounds:"
 msgstr "Rondas concluidas:"
 
-#: .\templates\basta\session.html:109 .\templates\basta\start.html:109
+#: .\templates\basta\session.html:109 .\templates\basta\start.html:105
 msgid "Winner"
 msgstr "Ganador"
 
@@ -322,12 +354,12 @@ msgstr "Ganador"
 msgid "Score"
 msgstr "Puntos"
 
-#: .\templates\basta\session.html:128 .\templates\basta\start.html:137
+#: .\templates\basta\session.html:128 .\templates\basta\start.html:132
 msgid "View"
 msgstr "Ver"
 
 #: .\templates\basta\session.html:136 .\templates\basta\session.html:161
-#: .\templates\basta\start.html:94 .\templates\basta\start.html:146
+#: .\templates\basta\start.html:90 .\templates\basta\start.html:140
 msgid "No sessions available"
 msgstr "No hay sesiónes disponibles"
 
@@ -385,17 +417,18 @@ msgstr "Unirse a sesión existente"
 
 #: .\templates\basta\start.html:45
 msgid "Please log in to create a new game session or join an existing one."
-msgstr "Acceder para crear una nueva sesión de juego o unirse a una ya existente."
+msgstr ""
+"Acceder para crear una nueva sesión de juego o unirse a una ya existente."
 
 #: .\templates\basta\start.html:49
 msgid "Active sessions:"
 msgstr "Sesiones activas:"
 
-#: .\templates\basta\start.html:58 .\templates\basta\start.html:111
+#: .\templates\basta\start.html:58 .\templates\basta\start.html:107
 msgid "Date"
 msgstr "Data"
 
-#: .\templates\basta\start.html:59 .\templates\basta\start.html:112
+#: .\templates\basta\start.html:59 .\templates\basta\start.html:108
 msgid "N. rounds"
 msgstr "N. de rondas"
 
@@ -403,39 +436,35 @@ msgstr "N. de rondas"
 msgid "No participants yet"
 msgstr "Todavía no hay participantes"
 
-#: .\templates\basta\start.html:87
-msgid "Login to join"
-msgstr "Hacer login para acceder"
-
-#: .\templates\basta\start.html:101
+#: .\templates\basta\start.html:97
 msgid "Closed sessions:"
 msgstr "Sesiones concluidas:"
 
-#: .\templates\basta\start.html:110
+#: .\templates\basta\start.html:106
 msgid "Points"
 msgstr "Puntos"
 
-#: .\templates\basta\start.html:156
+#: .\templates\basta\start.html:150
 msgid "first"
 msgstr "primera"
 
-#: .\templates\basta\start.html:157
+#: .\templates\basta\start.html:151
 msgid "previous"
 msgstr "anterior"
 
-#: .\templates\basta\start.html:161
+#: .\templates\basta\start.html:155
 msgid "page"
 msgstr "página"
 
-#: .\templates\basta\start.html:161
+#: .\templates\basta\start.html:155
 msgid "of"
 msgstr "de"
 
-#: .\templates\basta\start.html:165
+#: .\templates\basta\start.html:159
 msgid "next"
 msgstr "próxima"
 
-#: .\templates\basta\start.html:166
+#: .\templates\basta\start.html:160
 msgid "last"
 msgstr "última"
 
@@ -518,6 +547,9 @@ msgstr "Alguien pidió un e-mail para resetear la contraseña."
 #: .\templates\registration\password_reset_email.html:8
 msgid "Follow the link below:"
 msgstr "Seleccione el siguiente link:"
+
+#~ msgid "Login to join"
+#~ msgstr "Hacer login para acceder"
 
 #~ msgid "Start"
 #~ msgstr "Empieza"
