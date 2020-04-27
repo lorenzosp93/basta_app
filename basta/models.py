@@ -4,7 +4,6 @@ from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
 from django.shortcuts import reverse
 from django.utils.timezone import now
-from random import choice
 import random
 import string
 from .base.utils import validate_starts
@@ -176,7 +175,7 @@ class Round(Auditable):
                             .values_list('letter', flat=True)
         letters = list(string.ascii_lowercase)
         avail_letters = [l for l in letters if l not in taken_letters]
-        return choice(avail_letters)
+        return random.sample(avail_letters, k=1)
 
     def save(self, *args, **kwargs):
         "Override save function to calculate the round number"
@@ -210,6 +209,7 @@ class Play(TimeStampable):
     score = models.PositiveIntegerField(editable=False, default=0)
 
     def get_categories(self):
+        random.seed(self.round.pk)
         if self.round.session.random_categories:
             return random.sample(list(Category.objects.all()) ,k=len(DEFAULTS))
         else:

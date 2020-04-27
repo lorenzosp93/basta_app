@@ -362,7 +362,7 @@ msgstr "Scegliere categorie"
 msgid ""
 "Select the categories you want to include holding Ctrl (or Cmd), leave blank "
 "for default"
-msgstr "Selezionare la categoria che vuoi includere sostenendo Ctrl (o Cmd), lasciare"
+msgstr "Selezionare la categoria che vuoi includere sostenendo Ctrl (o Cmd), lasciare "
 "in bianco per le categorie predefinite"
 
 #: .\templates\basta\start.html:35
