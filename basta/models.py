@@ -122,8 +122,8 @@ class Session(Auditable, Named):
         return self.name
 
     def save(self, *args, **kwargs):
-        return super().save(*args, **kwargs)
-        if not self.categories:
+        super().save(*args, **kwargs)
+        if not self.categories.all():
             self.categories.set(Category.objects.filter(default=True))
 
 class Round(Auditable):
