@@ -40,6 +40,7 @@ class PlayView(AjaxableResponseMixin, UpdateView):
             return self.form_invalid(form)
     
     def form_valid(self, form):
+        self.formset_validate()
         if self.request.POST.get("Stop"):
             return self.upon_valid_stop(form, self.request.user)
         return super().form_valid(form)
@@ -50,7 +51,6 @@ class PlayView(AjaxableResponseMixin, UpdateView):
         return self.finish_round(form)
 
     def finish_round(self, form):
-        self.formset_validate()
         if self.request.is_ajax():
             return JsonResponse({"stop":True}, status=200)
         return redirect(self.get_success_url(form))
