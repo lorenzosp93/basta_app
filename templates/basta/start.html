@@ -42,7 +42,7 @@
 
   </form>
   {% else %}
-    <h5>{%trans "Please log in to create a new game session or join an existing one."%}</h5>
+    <h5 href="{% url login %}">{%trans "Please log in to create a new game session or join an existing one."%}</h5>
   {% endif %}
 </div>
 
