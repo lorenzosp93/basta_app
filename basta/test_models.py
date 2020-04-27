@@ -5,20 +5,36 @@ from django.core.validators import ValidationError
 from django.utils.crypto import get_random_string
 from unittest import mock
 from copy import copy
-from .models import Play, Round, Session
+from .models import (
+    Play,
+    Round,
+    Session,
+    Category,
+    PlayCategory
+)
 
 # Write your tests here
 
 class TestBastaModels(TestCase):
     def setUp(self):
         self.user = User.objects.create_user(username="testuser1")
-        self.session = Session.objects.create(name='test session')
+        self.category = Category.objects.get(
+            name="name",
+        )
+        self.session = Session.objects.create(
+            name='test session',
+        )
+        self.session.categories.set([self.category])
         self.round = Round.objects.create(
             session=self.session,
         )
         self.play = Play.objects.create(
             round=self.round,
             user=self.user,
+        )
+        self.playcategory = PlayCategory.objects.create(
+            play=self.play,
+            category=self.category,
         )
 
     def test_auditable(self):
@@ -50,17 +66,18 @@ class TestBastaModels(TestCase):
     def test_play_create(self):
         self.assertIsInstance(self.play, Play)
     
-    def test_play_validate(self):
+    def test_playcategory_validate(self):
         play = copy(self.play)
         letter = play.round.letter
-        play.name = letter + 'test'
-        play.clean()
+        playcategory = play.categories.first()
+        playcategory.value = letter + 'test'
+        playcategory.clean()
         next_letter = chr(ord(letter) + 1)
         wr_name = next_letter + 'test'
-        play.name = wr_name
+        playcategory.value = wr_name
         self.assertRaises(
             ValidationError,
-            play.clean)
+            playcategory.clean)
     
     
     def set_up_plays(self, round_=None):
@@ -72,6 +89,12 @@ class TestBastaModels(TestCase):
             round=round_,
             user=user2,
         )
+        play1.categories.set([copy(self.playcategory)])
+        playcategory2 = PlayCategory.objects.create(
+            play=play2,
+            category=self.category
+        )
+        play2.categories.set([playcategory2])
         return play1, play2
 
     def set_up_scores(self, round_=None):
