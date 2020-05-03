@@ -22,6 +22,9 @@ a {
 .btn:hover {
     border-color: white;
 }
+.btn:active {
+    border-color: white !important;
+}
 
 .btn-danger {
     background-color: #FB4C2D;
@@ -35,7 +38,9 @@ a {
     background-color: #B98A58;
     border-color: white;
 }
-
+.btn-secondary:active {
+    background-color: black !important;
+}
 
 .btn-primary {
     background-color: silver;
@@ -44,10 +49,14 @@ a {
 .btn-primary:hover {
     background-color: #ACABA9;
 }
+.btn-primary:active {
+    background-color: black !important;
+}
 
 .text-muted {
-    color: #ACABA9 !important;
+    color: white !important;
 }
+
 .sticky-top {
     position: sticky;
     top: 0;
