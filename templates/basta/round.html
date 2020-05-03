@@ -27,7 +27,7 @@
   {% endif %}
 </div>
 
-{% if not round.active %}
+{% if not round.active and round.session.active %}
 <form method="POST" action="{%url "basta:playscore" slug=round.session.slug number=round.number %}">
   {% csrf_token %}
   <div class="table-responsive">
