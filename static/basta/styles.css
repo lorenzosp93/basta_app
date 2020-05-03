@@ -1,0 +1,55 @@
+
+body {
+    font-family: Helvetica;
+    font-weight: 400;
+    background-color: #F1E3D2;
+
+}
+
+a {
+    color: #FB4C2D;
+}
+
+.jumbotron {
+    background-color: #6B768A;
+    border-radius: 0.7rem;
+    color: #F1E3D2;
+}
+
+.btn {
+    border-color: white;
+}
+.btn:hover {
+    border-color: white;
+}
+
+.btn-danger {
+    background-color: #FB4C2D;
+}
+
+.btn-secondary {
+    background-color: #F1E3D2;
+    color: black;
+}
+.btn-secondary:hover {
+    background-color: #B98A58;
+    border-color: white;
+}
+
+
+.btn-primary {
+    background-color: silver;
+    color: white;
+} 
+.btn-primary:hover {
+    background-color: #ACABA9;
+}
+
+.text-muted {
+    color: #ACABA9 !important;
+}
+.sticky-top {
+    position: sticky;
+    top: 0;
+  }
+
