@@ -3,7 +3,11 @@
 
 {% block content %}
 
-<h3> {% trans "Welcome to Basta online" %} </h3>
+<div class="row my-3">
+{% load static %}
+<img class="mx-auto" src="{% static 'basta/basta_logo.svg' %}" alt="" height='250rem'>
+<h1 class="mx-auto my-auto"> {% trans "Welcome to Basta online" %} </h1>
+</div>
 
 <div class="jumbotron">
 {% if user.is_authenticated %}
@@ -37,7 +41,7 @@
         </small>
       </div>
     </div>
-    <button type="submit" class="btn btn-success">{%trans "Create"%}</button>
+    <button type="submit" class="btn btn-secondary">{%trans "Create"%}</button>
     <a role="button" href='#active_sessions' class="btn btn-primary">{%trans "Join existing"%}</a>
 
   </form>

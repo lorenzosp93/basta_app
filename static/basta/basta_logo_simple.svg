@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 1080 1080" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:1.5;">
+    <g id="Logo" transform="matrix(1.11057,0,0,1.11057,-59.7078,-59.7078)">
+        <g id="Stopsign">
+            <g transform="matrix(1.15379,-0.477917,0.482574,1.16504,-310.027,186.802)">
+                <path d="M520.603,188.534L752.669,284.659L848.793,516.724L752.669,748.789L520.603,844.914L288.538,748.789L192.414,516.724L288.538,284.659L520.603,188.534Z" style="fill:rgb(251,76,45);stroke:rgb(107,118,138);stroke-width:9.89px;"/>
+            </g>
+            <g transform="matrix(1.09364,-0.453001,0.45463,1.09757,-264.272,208.691)">
+                <path d="M520.603,188.534L752.669,284.659L848.793,516.724L752.669,748.789L520.603,844.914L288.538,748.789L192.414,516.724L288.538,284.659L520.603,188.534Z" style="fill:none;stroke:rgb(241,227,210);stroke-width:26.05px;"/>
+            </g>
+        </g>
+        <g id="Name" transform="matrix(1,1.11022e-16,0,1,0,54.1382)">
+            <g transform="matrix(1,0,0,1,-78.4397,-71.3793)">
+                <text x="328.19px" y="627.992px" style="font-family:'AgencyFB-Reg', 'Agency FB', sans-serif;font-stretch:condensed;font-size:288px;fill:rgb(107,118,138);stroke:rgb(241,227,210);stroke-width:2.88px;stroke-linecap:butt;stroke-miterlimit:2;">BASTA</text>
+            </g>
+            <g transform="matrix(0.900439,0,0,0.900439,53.1973,58.6616)">
+                <text x="238.19px" y="623.746px" style="font-family:'Helvetica-Bold', 'Helvetica';font-weight:700;font-size:48px;fill:rgb(241,227,210);">NAMES THINGS CITIES</text>
+            </g>
+        </g>
+    </g>
+</svg>
