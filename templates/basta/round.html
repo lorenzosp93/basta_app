@@ -17,7 +17,7 @@
   <h3> {% trans "Round #" %} {{ round.number }} </h3>
 
   {% if round.active %}
-  <a role="button" class="btn btn-primary my-3" href="{% url 'basta:playcreate' round.session.slug round.number %}">
+  <a role="button" class="btn btn-secondary my-3" href="{% url 'basta:playcreate' round.session.slug round.number %}">
     {% trans "Start your play" %}
   </a>
   {% else %}
