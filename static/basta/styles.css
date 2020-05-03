@@ -3,7 +3,6 @@ body {
     font-family: Helvetica;
     font-weight: 400;
     background-color: #F1E3D2;
-
 }
 
 a {
@@ -12,17 +11,22 @@ a {
 
 .jumbotron {
     background-color: #6B768A;
-    border-radius: 0.7rem;
+    border-radius: 0.9rem;
     color: #F1E3D2;
 }
 
+/* Buttons */
 .btn {
     border-color: white;
+    border-radius: 0.7rem;
 }
 .btn:hover {
     border-color: white;
 }
 .btn:active {
+    border-color: white !important;
+}
+.btn:target {
     border-color: white !important;
 }
 
@@ -56,7 +60,12 @@ a {
 .text-muted {
     color: white !important;
 }
-
+.page-link {
+    color: #B98A58;
+}
+.page-link:hover {
+    color: #B98A58;
+}
 .sticky-top {
     position: sticky;
     top: 0;
