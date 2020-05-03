@@ -74,7 +74,6 @@ class Session(Auditable, Named):
         verbose_name=_("Is session active?"),
         default = True,
     )
-
     categories = models.ManyToManyField(
         Category,
         related_name="+",
@@ -226,7 +225,7 @@ class Play(TimeStampable):
         related_name="play_set"
     )
 
-    score = models.PositiveIntegerField(editable=False, default=0)
+    score = models.PositiveIntegerField(default=0)
 
     def get_categories(self):
         random.seed(self.round.pk)
