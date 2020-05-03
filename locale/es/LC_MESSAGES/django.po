@@ -314,7 +314,7 @@ msgstr "Cancelar"
 #, fuzzy
 #| msgid "Closed sessions:"
 msgid "Close session"
-msgstr "Sesiones concluidas:"
+msgstr "Cerrar la sesión"
 
 #: .\templates\basta\session.html:62
 #, fuzzy

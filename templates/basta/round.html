@@ -55,7 +55,7 @@
           {% trans "No plays available yet" %}
         </p>
         {% endfor %}
-        {% if my_play.score == 0 %}
+        {% if my_play.score == 0 and round.session.active %}
         <tr>
           <th scope="row">{%trans "My score"%}</th>
           {% for category in round.play_set.first.categories.all %}
@@ -67,7 +67,7 @@
       </tbody>
     </table>
   </div>
-  {% if my_play.score == 0 %}
+  {% if my_play.score == 0 and round.session.active %}
 
   <div class="row justify-content-start">
     <button type="submit" name="Submit" class="btn btn-danger m-3">{% trans "Submit score" %}</button>
