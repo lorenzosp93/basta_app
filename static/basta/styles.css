@@ -25,9 +25,11 @@ a {
 }
 .btn:active {
     border-color: white !important;
+    background-color: black !important;
 }
-.btn:target {
+.btn:focus {
     border-color: white !important;
+    background-color: #6B768A !important;
 }
 
 .btn-danger {
@@ -42,9 +44,7 @@ a {
     background-color: #B98A58;
     border-color: white;
 }
-.btn-secondary:active {
-    background-color: black !important;
-}
+
 
 .btn-primary {
     background-color: silver;
@@ -52,9 +52,6 @@ a {
 } 
 .btn-primary:hover {
     background-color: #ACABA9;
-}
-.btn-primary:active {
-    background-color: black !important;
 }
 
 .text-muted {
