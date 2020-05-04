@@ -221,16 +221,17 @@ def session_create(request):
         created_by=request.user,
         modified_by=request.user,
     )
-    new_session.categories.set(categories)
+    if categories:
+        new_session.categories.set(categories)
     return redirect_session(new_session.slug)
 
 def parse_post(request):
     name = request.POST.get('session_name', '')
     random = request.POST.get('session_random', '')
-    if random == '':
-        random = False
-    else:
+    if random:
         random = True
+    else:
+        random = False
     categories_list = request.POST.getlist('categories', '')
     categories = [
         Category.objects.get(name=category)
