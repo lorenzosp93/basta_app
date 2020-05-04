@@ -43,6 +43,19 @@ CATEGORIES = (
     ('boardgames', _('Board game')),
     ('author', _('Author')),
     ('song', _('Song')), #v2, migration 0016
+    ('elements', _('Chemical element')),
+    ('petnames', _('Pet name')),
+    ('transportation', _('Means of transportation')),
+    ('furniture', _('Furniture')),
+    ('disease', _('Disease / Illness')),
+    ('genres', _('Musical genre')),
+    ('villains', _('Villain')),
+    ('excuses', _('Excuses not to go to a party')),
+    ('reasonsquitjob',_('Reasons to quit your job')),
+    ('doatdate', _('Things to do on a date')),
+    ('hobbies', _('Hobby / Activity')),
+    ('uniforms', _('People in uniform')),
+    ('literary', _('Work of literature')) #v3, migration 0018
 )
 DEFAULTS = [
     'name', 'surname','plant', 'animal',
