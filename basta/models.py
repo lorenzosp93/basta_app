@@ -130,7 +130,7 @@ class Session(Auditable, Named):
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
         if not self.categories.all():
-            self.categories.set(Category.objects.filter(default=True))
+            self.categories.add(*Category.objects.filter(default=True))
 
 class Round(Auditable):
     "Model to defind one round within a session"
