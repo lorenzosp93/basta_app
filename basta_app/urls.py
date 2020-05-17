@@ -32,9 +32,8 @@ urlpatterns += i18n_patterns(
     path('accounts/signup/', SignupView.as_view(), name='signup'),
     path(
         'accounts/password/reset/',
-        auth_views.password_reset,
+        auth_views.PasswordResetView.as_view(),
         {
-        'post_reset_redirect': reverse('auth_password_reset_done'),
         'html_email_template_name': 'registration/password_reset_html_email.html'
         },
         name='auth_password_reset'
