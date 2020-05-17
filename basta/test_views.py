@@ -6,10 +6,10 @@ from unittest import mock
 from copy import copy
 from .models import Play, Round, Session, PlayCategory, Category
 from .views import (
-    PlayView, RoundView, SessionView,
+    PlayView, RoundView, SessionView, SessionListView,
     play_create, play_score,
     round_create,
-    session_close, session_create,
+    session_close,
 )
 from .forms import PlayCategoryFormSet, PlayForm
 
@@ -35,40 +35,6 @@ class TestFBViews(TestCase):
         self.playcategory = PlayCategory(
             play=self.play,
             category=self.category,
-        )
-
-    def test_session_create(self):
-        s_name = 'test 1'
-        request = self.factory.post(
-            reverse(
-                'basta:sessioncreate'
-            ),
-            data={
-                'session_name': s_name,
-            }
-        )
-        request.user = self.user
-        response = session_create(request)
-        session = Session.objects.get(name=s_name)
-        self.assertEqual(
-            response.status_code, 302
-        )
-        self.assertIsInstance(
-            session,
-            Session
-        )
-        self.assertEqual(
-            response.url,
-            reverse(
-                'basta:session',
-                kwargs={
-                    'slug':'test-1'
-                }
-            )
-        )
-        self.assertEqual(
-            self.user,
-            session.created_by
         )
     
     def test_session_close(self):
@@ -228,6 +194,41 @@ class TestCBViews(TestCase):
         view.args = args
         view.kwargs = kwargs
         return view
+
+    def test_session_create(self):
+        s_name = 'test 1'
+        request = self.factory.post(
+            reverse(
+                'basta:home'
+            ),
+            data={
+                'name': s_name,
+            }
+        )
+        request.user = self.user
+        sessionlistview = self.setup_view(SessionListView(), request)
+        response = sessionlistview.post(request)
+        session = Session.objects.get(name=s_name)
+        self.assertEqual(
+            response.status_code, 302
+        )
+        self.assertIsInstance(
+            session,
+            Session
+        )
+        self.assertEqual(
+            response.url,
+            reverse(
+                'basta:session',
+                kwargs={
+                    'slug':'test-1'
+                }
+            )
+        )
+        self.assertEqual(
+            self.user,
+            session.created_by
+        )
 
     def set_up_round_view(self, slug=None, number=None, user=None):
         if not slug:
