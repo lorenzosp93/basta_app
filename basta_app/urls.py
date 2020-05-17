@@ -31,12 +31,11 @@ urlpatterns += i18n_patterns(
     path('', include("basta.urls", namespace="basta")),
     path('accounts/signup/', SignupView.as_view(), name='signup'),
     path(
-        'accounts/password/reset/',
-        auth_views.PasswordResetView.as_view(),
-        {
-        'html_email_template_name': 'registration/html_password_reset_email.html'
-        },
-        name='auth_password_reset'
+        'accounts/password_reset/',
+        auth_views.PasswordResetView.as_view(
+            html_email_template_name='registration/html_password_reset_email.html'
+        ),
+        name='password_reset'
     ),
     path('accounts/', include('django.contrib.auth.urls')),
 )
