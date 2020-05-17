@@ -14,6 +14,8 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
+from django.contrib.auth import views as auth_views
+from django.shortcuts import reverse
 from django.urls import path, include
 from django.conf.urls.i18n import i18n_patterns
 from django.contrib.sitemaps.views import sitemap
@@ -28,5 +30,14 @@ urlpatterns = [
 urlpatterns += i18n_patterns(
     path('', include("basta.urls", namespace="basta")),
     path('accounts/signup/', SignupView.as_view(), name='signup'),
+    path(
+        'accounts/password/reset/',
+        auth_views.password_reset,
+        {
+        'post_reset_redirect': reverse('auth_password_reset_done'),
+        'html_email_template_name': 'registration/password_reset_html_email.html'
+        },
+        name='auth_password_reset'
+    ),
     path('accounts/', include('django.contrib.auth.urls')),
 )
