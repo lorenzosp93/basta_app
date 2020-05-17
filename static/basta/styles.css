@@ -68,6 +68,9 @@ a {
 .text-muted {
     color: white !important;
 }
+.text-danger {
+    color: #FB4C2D !important;
+}
 .page-link {
     color: #B98A58;
     border-color: #B98A58;

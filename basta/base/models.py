@@ -1,8 +1,10 @@
 "Module to define the base basta app models"
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from django.core.validators import ValidationError
 from django.contrib.auth.models import User
 from django.utils.text import slugify
+from django.utils.timezone import datetime
 
 class TimeStampable(models.Model):
     "Abstract model to define timestamp attributes"
@@ -37,6 +39,16 @@ class Named(models.Model):
 
     def __str__(self):
         return self.name
+    
+    def clean(self):
+        "Avoid object with the same slug from being created to enforce uniqueness"
+        if slugify(self.name) in self.__class__.objects.values_list('slug', flat=True):
+            raise ValidationError({
+                'name': ValidationError(
+                    _("A session named '%(name)s' already exists"),
+                    params={'name': self.name}
+                )
+            })
 
     def save(self, *args, **kwargs):
         "Override save function to add default for name field and slugify"
@@ -44,7 +56,11 @@ class Named(models.Model):
         super().save(*args, **kwargs)
         
     def slug_name(self):
-        self.slug = slugify(self.get_name())
+        if not self.slug:
+            if (slug := slugify(self.get_name())):
+                self.slug = slug
+            else:
+                self.slug = slugify(datetime.now())
     
     def get_name(self):
         return self.name

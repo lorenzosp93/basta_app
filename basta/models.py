@@ -74,7 +74,7 @@ class Category(models.Model):
         default=False,
     )
     def __str__(self):
-        return "<Category " + self.name +">"
+        return self.get_name_display()
 
 class Session(Auditable, Named):
     "Model to define a play session, participants and rules"
@@ -90,6 +90,7 @@ class Session(Auditable, Named):
     categories = models.ManyToManyField(
         Category,
         related_name="+",
+        blank=True
     )
 
     random_categories = models.BooleanField(
@@ -137,7 +138,7 @@ class Session(Auditable, Named):
     
     def get_name(self):
         if not self.name:
-            self.name =  _("Game on %(date)s" % {"date": now()})
+            self.name =  _("Session on %(date)s" % {"date": now()})
         return self.name
 
     def save(self, *args, **kwargs):

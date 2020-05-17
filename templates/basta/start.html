@@ -4,38 +4,37 @@
 {% block content %}
 
 <div class="row my-3">
-{% load static %}
-<img class="mx-auto" src="{% static 'basta/basta_logo.svg' %}" alt="" height='250rem'>
-<h1 class="mx-auto my-auto"> {% trans "Welcome to Basta online" %} </h1>
+  {% load static %}
+  <img class="mx-auto" src="{% static 'basta/basta_logo.svg' %}" alt="" height='250rem'>
+  <h1 class="mx-auto my-auto"> {% trans "Welcome to Basta online" %} </h1>
 </div>
 
 <div class="jumbotron my-4">
-{% if user.is_authenticated %}
+  {% if user.is_authenticated %}
   <h5> {%trans "Create a new game session:"%} </h5>
-  <form method="POST" action="{% url 'basta:sessioncreate' %}">
+  <form method="POST">
     {% csrf_token %}
     <div class="form-group">
-      <label for="session_name">{%trans "Session name"%}</label>
-      <input type="text" class="form-control" name="session_name" aria-describedby="nameHelp" populate="">
+      <label for="name">{%trans "Session name"%}</label>
+      {{form.name}}
       <small id="nameHelp" class="form-text text-muted">
         {%trans "Insert a name for the new session, cannot be duplicate"%}
       </small>
+      <span class="text-danger">
+        {% trans form.name.errors.as_text|cut:'* ' %}
+      </span>
     </div>
     <div class="row">
       <div class="form-group col">
         <label for="categories">{%trans "Choose categories"%}</label>
-        <select class="form-control" name="categories" multiple>
-          {% for category in categories %}
-          <option value="{{ category.name }}">{% trans category.get_name_display %}</option>
-          {% endfor %}
-        </select>
+        {{ form.categories }}
         <small id="catHelp" class="form-text text-muted">
           {% trans "Select the categories you want to include holding Ctrl (or Cmd), leave blank for default"%}
         </small>
       </div>
       <div class="form-group col">
-        <input type="checkbox" class="form-check-input" name="session_random" value='true' aria-describedby="randomHelp">
-        <label class="form-check-label" for="session_random">{%trans "Random categories"%}</label>
+        {{ form.random_categories }}
+        <label class="form-check-label" for="random_categories">{%trans "Random categories"%}</label>
         <small id="randomHelp" class="form-text text-muted">
           {%trans "Select for random categories on each round"%}
         </small>
@@ -46,7 +45,7 @@
 
   </form>
   {% else %}
-    <h5 href="{% url 'login' %}">{%trans "Please log in to create a new game session or join an existing one."%}</h5>
+  <h5 href="{% url 'login' %}">{%trans "Please log in to create a new game session or join an existing one."%}</h5>
   {% endif %}
 </div>
 
@@ -117,7 +116,7 @@
       <tr>
         <th scope="row">{{ session.name }}</td>
 
-        {% for winner, score in session.get_winner_score.items %}
+          {% for winner, score in session.get_winner_score.items %}
         <td class="text-center"><i class="fas fa-crown"></i><br>{{winner}}</td>
         <td>{{score}}</td>
         {% empty %}
