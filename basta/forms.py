@@ -1,5 +1,6 @@
 from django import forms
-from .models import Play, PlayCategory, CATEGORIES
+from .models import Session, Play, PlayCategory, CATEGORIES
+
 
 # Create your forms here
 PlayCategoryFormSet = forms.inlineformset_factory(
@@ -10,7 +11,6 @@ PlayCategoryFormSet = forms.inlineformset_factory(
     widgets={
         'value': forms.TextInput(
             attrs={
-                'required': False,
                 'class': 'form-control',
                 'autocomplete': 'off',
             },
@@ -28,4 +28,16 @@ class PlayForm(forms.ModelForm):
         fields = ['id']
         widgets = {
             'id': forms.HiddenInput(),
+        }
+
+class SessionForm(forms.ModelForm):
+    class Meta:
+        model = Session
+        fields = ['name', 'categories','random_categories']
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control'}),
+            'categories': forms.SelectMultiple(attrs={'class': 'form-control'}),
+            'random_categories': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            })
         }

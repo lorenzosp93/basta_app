@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, reverse
 from django.http import JsonResponse
 from django.views.generic import ListView, DetailView, UpdateView
+from django.views.generic.edit import FormMixin
 from django.utils.translation import gettext as _
 from django.utils.decorators import method_decorator
 from django.contrib.auth.models import User
@@ -8,7 +9,7 @@ from django.contrib.auth.decorators import login_required
 from random import randint
 import json
 from .base.views import AjaxableResponseMixin
-from .forms import PlayCategoryFormSet, PlayForm
+from .forms import PlayCategoryFormSet, PlayForm, SessionForm
 from .models import Round, Session, Play, Category, PlayCategory
 
 # Create your views here.
@@ -140,18 +141,25 @@ def poll_session_refresh_view(request, slug):
         else:
             return JsonResponse({}, status=404)
 
-class SessionListView(ListView):
+@method_decorator(login_required, name='post')
+class SessionListView(ListView, FormMixin):
     template_name = "basta/start.html"
     model = Session
     context_object_name = "sessions"
     paginate_by = 5
     ordering = ['-created_at']
+    form_class = SessionForm
+        
+    def post(self, request, *args, **kwargs):
+        form = self.get_form()
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["categories"] = Category.objects.all()
-        return context
-    
+    def form_valid(self, form):
+        form.save()
+        return redirect(form.instance.get_absolute_url())
 
 def redirect_play(slug, number):
     return redirect(reverse("basta:play", kwargs={
@@ -211,33 +219,6 @@ def round_create(request, slug):
         return redirect_round(slug, new_round.number)
     else:
         return redirect_session(slug)
-
-@login_required
-def session_create(request):
-    name, random, categories = parse_post(request)
-    new_session = Session.objects.create(
-        name=name,
-        random_categories = random,
-        created_by=request.user,
-        modified_by=request.user,
-    )
-    if categories:
-        new_session.categories.set(categories)
-    return redirect_session(new_session.slug)
-
-def parse_post(request):
-    name = request.POST.get('session_name', '')
-    random = request.POST.get('session_random', '')
-    if random:
-        random = True
-    else:
-        random = False
-    categories_list = request.POST.getlist('categories', '')
-    categories = [
-        Category.objects.get(name=category)
-        for category in categories_list
-    ]
-    return name, random, categories
 
 @login_required
 def session_close(request, slug):
