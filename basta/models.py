@@ -138,7 +138,7 @@ class Session(Auditable, Named):
     
     def get_name(self):
         if not self.name:
-            self.name =  _("Game on %(date)s" % {"date": now()})
+            self.name =  _("Session on %(date)s" % {"date": now()})
         return self.name
 
     def save(self, *args, **kwargs):

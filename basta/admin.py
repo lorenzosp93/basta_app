@@ -15,7 +15,11 @@ class RoundTabular(admin.TabularInline):
 @admin.register(Session)
 class SessionAdmin(AuditableAdmin):
     inlines = [RoundTabular]
-    list_display = ('name', 'active')
+    list_display = (
+        'name', 'active',
+        'created_by', 'created_at',
+        'modified_by', 'modified_at'
+    )
 
 class PlayTabular(admin.TabularInline):
     model = Play
@@ -28,7 +32,9 @@ class RoundAdmin(AuditableAdmin):
         '__str__',
         'active',
         'created_by',
-        'created_at'
+        'created_at',
+        'modified_by',
+        'modified_at'
     )
 
 class PlayCategoryTabular(admin.TabularInline):

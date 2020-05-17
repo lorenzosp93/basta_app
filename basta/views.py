@@ -142,23 +142,24 @@ def poll_session_refresh_view(request, slug):
             return JsonResponse({}, status=404)
 
 @method_decorator(login_required, name='post')
-class SessionListView(ListView, FormMixin):
+class SessionListView(FormMixin, ListView):
     template_name = "basta/start.html"
     model = Session
     context_object_name = "sessions"
     paginate_by = 5
     ordering = ['-created_at']
     form_class = SessionForm
-        
+
     def post(self, request, *args, **kwargs):
         form = self.get_form()
         if form.is_valid():
             return self.form_valid(form)
         else:
+            self.object_list = self.get_queryset()
             return self.form_invalid(form)
 
     def form_valid(self, form):
-        form.save()
+        form.instance.save(user=self.request.user)
         return redirect(form.instance.get_absolute_url())
 
 def redirect_play(slug, number):

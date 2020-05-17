@@ -41,3 +41,4 @@ class SessionForm(forms.ModelForm):
                 'class': 'form-check-input'
             })
         }
+
