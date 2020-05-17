@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-17 17:16+0200\n"
+"POT-Creation-Date: 2020-05-17 23:28+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -527,6 +527,35 @@ msgstr "prossima"
 msgid "last"
 msgstr "ultima"
 
+#: .\templates\registration\html_password_reset_email.html:45
+msgid "Basta app - password reset"
+msgstr "Basta app - reset della password"
+
+#: .\templates\registration\html_password_reset_email.html:55
+msgid ""
+"You're receiving this email because you requested a password reset for your "
+"user account at"
+msgstr "Stai ricevendo questa mail perché hai richiesto un reset della password per "
+"il tuo account di"
+
+#: .\templates\registration\html_password_reset_email.html:62
+#, fuzzy
+#| msgid "Follow the link below:"
+msgid "Follow the link below to choose a new password: "
+msgstr "Clicca il seguente link per scegliere una nuova password:"
+
+#: .\templates\registration\html_password_reset_email.html:65
+msgid "Click here"
+msgstr "Clicca qui"
+
+#: .\templates\registration\html_password_reset_email.html:70
+msgid "Here is your username, in case you've forgotten: "
+msgstr "Questo è il tuo nome utente, in caso te lo sia dimenticato: "
+
+#: .\templates\registration\html_password_reset_email.html:74
+msgid "Thank you for using the app, from the team at"
+msgstr "Grazie per usare l'app, dal team di"
+
 #: .\templates\registration\logged_out.html:5
 msgid "Logged out"
 msgstr "Uscita effettuata"
@@ -593,17 +622,11 @@ msgstr ""
 "Ti abbiamo inviato le istruzioni per impostare la tua password. Se non "
 "l'avrai ricevuta entro alcuni minuti, controlla la tua cartella spam."
 
-#: .\templates\registration\password_reset_email.html:1
-msgid "Basta app"
-msgstr "App nomi-cose-città"
+#~ msgid "Basta app"
+#~ msgstr "App nomi-cose-città"
 
-#: .\templates\registration\password_reset_email.html:4
-msgid "Someone asked for password reset for email"
-msgstr "Qualcuno ha richiesto il reset della password per questa email"
-
-#: .\templates\registration\password_reset_email.html:8
-msgid "Follow the link below:"
-msgstr "Cliccare il seguente link:"
+#~ msgid "Someone asked for password reset for email"
+#~ msgstr "Qualcuno ha richiesto il reset della password per questa email"
 
 #~ msgid "Login to join"
 #~ msgstr "Accedi per unirti"
