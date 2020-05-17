@@ -113,7 +113,6 @@ EMAIL_HOST_PASSWORD = os.getenv('SENDGRID_PASSWORD', '')
 EMAIL_HOST= 'smtp.sendgrid.net'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-DEFAULT_FROM_EMAIL = 'me@lorenzosp.com'
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
