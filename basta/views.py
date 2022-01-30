@@ -1,3 +1,4 @@
+from wsgiref.simple_server import WSGIRequestHandler
 from django.shortcuts import render, redirect, reverse
 from django.http import JsonResponse
 from django.views.generic import ListView, DetailView, UpdateView
@@ -11,6 +12,9 @@ import json
 from .base.views import AjaxableResponseMixin
 from .forms import PlayCategoryFormSet, PlayForm, SessionForm
 from .models import Round, Session, Play, Category, PlayCategory
+
+def is_ajax(request):
+    return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
 
 # Create your views here.
 
@@ -52,7 +56,7 @@ class PlayView(AjaxableResponseMixin, UpdateView):
         return self.finish_round(form)
 
     def finish_round(self, form):
-        if self.request.is_ajax():
+        if is_ajax(self.request):
             return JsonResponse({"stop":True}, status=200)
         return redirect(self.get_success_url(form))
 
@@ -132,7 +136,7 @@ class SessionView(DetailView):
         return context
 
 def poll_session_refresh_view(request, slug):
-    if request.is_ajax():
+    if is_ajax(request):
         if Session.objects\
                   .get(slug=slug)\
                   .round_set\
